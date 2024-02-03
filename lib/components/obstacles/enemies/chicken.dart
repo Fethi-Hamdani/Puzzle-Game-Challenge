@@ -3,15 +3,11 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/components/player.dart';
-import 'package:flutter_game_challenge/data/constants/animations.dart';
-import 'package:flutter_game_challenge/data/constants/hitboxes.dart';
-import 'package:flutter_game_challenge/data/controls/audio_controls.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/enums/enemy_state.dart';
-import 'package:flutter_game_challenge/pixel_adventure.dart';
+import 'package:flutter_game_challenge/plane.dart';
 
-class Chicken extends SpriteAnimationGroupComponent with HasGameRef<PixelAdventure>, CollisionCallbacks {
+class Chicken extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   final double offNeg;
   final double offPos;
   Chicken({
@@ -36,34 +32,44 @@ class Chicken extends SpriteAnimationGroupComponent with HasGameRef<PixelAdventu
 
   @override
   FutureOr<void> onLoad() {
-    debugMode = GameControls.debugMode;
     player = game.player;
+    Paint paint = Paint()..color = Colors.white;
 
-    add(Hitboxes.chickenHitbox);
+    ShapeHitbox hitbox = RectangleHitbox()
+      ..paint = paint
+      ..renderShape = true;
 
-    _loadAllAnimations();
-    _calculateRange();
+    add(hitbox);
+
+    // game.world.add(RectangleComponent(
+    //   size: size,
+    //   position: position,
+    //   paint: Paint()..color = Colors.white,
+    // ));
+
+    // _loadAllAnimations();
+    // _calculateRange();
     return super.onLoad();
   }
 
   @override
   void update(double dt) {
     if (!gotStomped) {
-      _updateEnemyState();
-      _movement(dt);
+      // _updateEnemyState();
+      // _movement(dt);
     }
 
     super.update(dt);
   }
 
   void _loadAllAnimations() {
-    animations = {
-      EnemyState.idle: game.chickenAnimations(EnemyState.idle, 13),
-      EnemyState.run: game.chickenAnimations(EnemyState.run, 14),
-      EnemyState.hit: game.chickenAnimations(EnemyState.hit, 15)..loop = false,
-    };
+    // animations = {
+    //   EnemyState.idle: game.chickenAnimations(EnemyState.idle, 13),
+    //   EnemyState.run: game.chickenAnimations(EnemyState.run, 14),
+    //   EnemyState.hit: game.chickenAnimations(EnemyState.hit, 15)..loop = false,
+    // };
 
-    current = EnemyState.idle;
+    // current = EnemyState.idle;
   }
 
   void _calculateRange() {
@@ -97,24 +103,24 @@ class Chicken extends SpriteAnimationGroupComponent with HasGameRef<PixelAdventu
         player.y < position.y + height;
   }
 
-  void _updateEnemyState() {
-    current = (velocity.x != 0) ? EnemyState.run : EnemyState.idle;
+  // void _updateEnemyState() {
+  //   current = (velocity.x != 0) ? EnemyState.run : EnemyState.idle;
 
-    if ((moveDirection > 0 && scale.x > 0) || (moveDirection < 0 && scale.x < 0)) {
-      flipHorizontallyAroundCenter();
-    }
-  }
+  //   if ((moveDirection > 0 && scale.x > 0) || (moveDirection < 0 && scale.x < 0)) {
+  //     flipHorizontallyAroundCenter();
+  //   }
+  // }
 
   void collidedWithPlayer() async {
-    if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      AudioControls.chickenGotStumpedSound();
-      gotStomped = true;
-      current = EnemyState.hit;
-      player.velocity.y = -_bounceHeight;
-      await animationTicker?.completed;
-      removeFromParent();
-    } else {
-      player.collidedwithEnemy();
-    }
+    // if (player.velocity.y > 0 && player.y + player.height > position.y) {
+    //   AudioControls.chickenGotStumpedSound();
+    //   gotStomped = true;
+    //   current = EnemyState.hit;
+    //   player.velocity.y = -_bounceHeight;
+    //   await animationTicker?.completed;
+    //   removeFromParent();
+    // } else {
+    player.collidedwithEnemy();
+    // }
   }
 }

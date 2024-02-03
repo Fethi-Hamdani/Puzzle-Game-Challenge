@@ -1,24 +1,29 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/data/enums/game_characters.dart';
 import 'package:flutter_game_challenge/pixel_adventure.dart';
+import 'package:flutter_game_challenge/plane.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
-  await Flame.device.setLandscape();
+  // await Flame.device.setLandscape();
 
-  PixelAdventure game = PixelAdventure();
-  runApp(
-    GameWidget(
-      game: kDebugMode ? PixelAdventure() : game,
-      overlayBuilderMap: {
-        "menu": (BuildContext context, PixelAdventure gameRef) => MainMenu(game: gameRef),
-      },
-    ),
-  );
+  final game = PlaneGame(); // Modify this line
+  runApp(GameWidget(game: kDebugMode ? PlaneGame() : game));
+
+  // PixelAdventure game = PixelAdventure();
+  // runApp(
+  //   GameWidget(
+  //     game: kDebugMode ? PixelAdventure() : game,
+  //     overlayBuilderMap: {
+  //       "menu": (BuildContext context, PixelAdventure gameRef) => MainMenu(game: gameRef),
+  //     },
+  //   ),
+  // );
 }
 
 class MainMenu extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
 import 'package:flutter_game_challenge/components/bounding_box/custom_hitbox.dart';
@@ -12,12 +12,13 @@ import 'package:flutter_game_challenge/components/obstacles/hazards/saw.dart';
 import 'package:flutter_game_challenge/components/portals/checkpoint.dart';
 import 'package:flutter_game_challenge/data/controls/game_controls.dart';
 import 'package:flutter_game_challenge/data/enums/game_characters.dart';
-import 'package:flutter_game_challenge/pixel_adventure.dart';
+import 'package:flutter_game_challenge/my_componants/cloud.dart';
+
+import 'package:flutter_game_challenge/plane.dart';
 
 enum PlayerState { idle, running, jumping, falling, hit, appearing, disappearing }
 
-class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
+class Player extends SpriteAnimationGroupComponent with HasGameRef<PlaneGame>, KeyboardHandler, CollisionCallbacks {
   GameCharacters character;
   Player({
     position,
@@ -33,8 +34,8 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation appearingAnimation;
   late SpriteAnimation disappearingAnimation;
 
-  final double _gravity = 9.8;
-  final double _jumpForce = 260;
+  final double _gravity = -9.8;
+  final double _jumpForce = 260; //260
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
   double moveSpeed = 100;
@@ -48,8 +49,8 @@ class Player extends SpriteAnimationGroupComponent
   bool reachedCheckpoint = false;
   List<CollisionBlock> collisionBlocks = [];
   CustomHitbox hitbox = CustomHitbox(
-    offsetX: 10,
-    offsetY: 4,
+    offsetX: 0,
+    offsetY: 0,
     width: 14,
     height: 28,
   );
@@ -64,14 +65,17 @@ class Player extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     debugMode = GameControls.debugMode;
+
     _loadAllAnimations();
+    Paint paint = Paint()..color = Colors.green;
 
     startingPosition = Vector2(position.x, position.y);
 
-    add(RectangleHitbox(
-      position: Vector2(hitbox.offsetX, hitbox.offsetY),
-      size: Vector2(hitbox.width, hitbox.height),
-    ));
+    add(RectangleHitbox()
+      ..paint = paint
+      ..renderShape = true
+      ..position = position
+      ..size = size);
     return super.onLoad();
   }
 
@@ -97,10 +101,8 @@ class Player extends SpriteAnimationGroupComponent
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
-    final isLeftKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isRightKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight);
+    final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
@@ -112,12 +114,14 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (!reachedCheckpoint) {
-      if (other is Fruit) other.collidedWithPlayer();
-      if (other is Saw) _respawn();
-      if (other is Chicken) other.collidedWithPlayer();
-      if (other is Checkpoint) _reachedCheckpoint();
-    }
+    print("Hit something");
+
+    if (other is Fruit) other.collidedWithPlayer();
+    if (other is Cloud) print("i hit a Cloud");
+    if (other is Saw) _respawn();
+    if (other is Chicken) other.collidedWithPlayer();
+    if (other is Checkpoint) _reachedCheckpoint();
+    if (!reachedCheckpoint) {}
     super.onCollisionStart(intersectionPoints, other);
   }
 
@@ -190,7 +194,14 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _updatePlayerMovement(double dt) {
-    if (hasJumped && isOnGround) _playerJump(dt);
+    // if (hasJumped && isOnGround) _playerJump(dt);
+
+    if (hasJumped) {
+      velocity.y = _jumpForce;
+
+      position.y += velocity.y * dt;
+    }
+
     // if (velocity.y > _gravity) isOnGround = false; // optional
 
     velocity.x = horizontalMovement * moveSpeed;
@@ -198,8 +209,10 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (game.playSounds) FlameAudio.play('jump.wav', volume: game.soundVolume);
+    // if (game.playSounds) FlameAudio.play('jump.wav', volume: game.soundVolume);
+
     velocity.y = -_jumpForce;
+
     position.y += velocity.y * dt;
     isOnGround = false;
     hasJumped = false;
@@ -254,6 +267,8 @@ class Player extends SpriteAnimationGroupComponent
           if (velocity.y < 0) {
             velocity.y = 0;
             position.y = block.y + block.height - hitbox.offsetY;
+
+            isOnGround = true;
           }
         }
       }
@@ -267,7 +282,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() async {
-    if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
+    // if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
     const canMoveDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
@@ -290,9 +305,9 @@ class Player extends SpriteAnimationGroupComponent
 
   void _reachedCheckpoint() async {
     reachedCheckpoint = true;
-    if (game.playSounds) {
-      FlameAudio.play('disappear.wav', volume: game.soundVolume);
-    }
+    // if (game.playSounds) {
+    //   FlameAudio.play('disappear.wav', volume: game.soundVolume);
+    // }
     if (scale.x > 0) {
       position = position - Vector2.all(32);
     } else if (scale.x < 0) {
@@ -308,7 +323,7 @@ class Player extends SpriteAnimationGroupComponent
     position = Vector2.all(-640);
 
     const waitToChangeDuration = Duration(seconds: 3);
-    Future.delayed(waitToChangeDuration, () => game.loadNextLevel());
+    // Future.delayed(waitToChangeDuration, () => game.loadNextLevel());
   }
 
   void collidedwithEnemy() {
