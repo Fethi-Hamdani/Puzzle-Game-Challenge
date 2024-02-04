@@ -14,7 +14,7 @@ import 'package:flutter_game_challenge/data/controls/game_controls.dart';
 import 'package:flutter_game_challenge/data/enums/game_characters.dart';
 import 'package:flutter_game_challenge/my_componants/cloud.dart';
 
-import 'package:flutter_game_challenge/plane.dart';
+import 'package:flutter_game_challenge/plane_game.dart';
 
 enum PlayerState { idle, running, jumping, falling, hit, appearing, disappearing }
 
@@ -119,7 +119,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameRef<PlaneGame>, K
     if (other is Fruit) other.collidedWithPlayer();
     if (other is Cloud) print("i hit a Cloud");
     if (other is Saw) _respawn();
-    if (other is Chicken) other.collidedWithPlayer();
+    // if (other is Chicken) other.collidedWithPlayer();
     if (other is Checkpoint) _reachedCheckpoint();
     if (!reachedCheckpoint) {}
     super.onCollisionStart(intersectionPoints, other);

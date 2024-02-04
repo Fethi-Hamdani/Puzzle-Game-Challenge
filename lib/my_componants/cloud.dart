@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
-import 'package:flutter_game_challenge/components/player.dart';
-import 'package:flutter_game_challenge/plane.dart';
+import 'package:flutter_game_challenge/plane_game.dart';
+
+import '../data/constants/constants.dart';
 
 class Cloud extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   Cloud({
@@ -12,23 +14,43 @@ class Cloud extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCall
     super.size,
   });
 
+  final double speed = 150;
+
   late CollisionBlock collisionBlock = CollisionBlock(
     position: position,
     size: size,
   );
-  late final Player player;
+  Paint cloudColor = Paint()..color = Colors.white;
+  late ShapeHitbox bloc;
 
   @override
   FutureOr<void> onLoad() {
-    // add(collisionBlock);
-    player = game.player;
+    bloc = createhitBox(size, position);
 
-    add(RectangleHitbox(position: position, size: size));
+    add(bloc);
+
     return super.onLoad();
   }
 
+  @override
+  void update(double dt) {
+    x -= speed * dt;
+    if (x + width < 0) {
+      removeFromParent();
+      // x = gameWidth + width;
+    }
+    super.update(dt);
+  }
+
   void collidedWithPlayer() async {
-    print("Colided With Obstacle");
-    player.collidedwithEnemy();
+    // player.collidedwithEnemy();
+  }
+
+  ShapeHitbox createhitBox(Vector2 thissize, Vector2 thisposition) {
+    return RectangleHitbox()
+      ..size = thissize
+      ..position = thisposition
+      ..paint = cloudColor
+      ..renderShape = true;
   }
 }
