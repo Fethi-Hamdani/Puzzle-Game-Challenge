@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_game_challenge/components/obstacles/enemies/chicken.dart';
-import 'package:flutter_game_challenge/data/enums/view_priority.dart';
 
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
-import 'package:flutter_game_challenge/components/player.dart';
 import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/my_componants/cloud.dart';
-import 'package:flutter_game_challenge/plane.dart';
+import 'package:flutter_game_challenge/plane_game.dart';
+
+import 'data/constants/constants.dart';
+import 'my_componants/cloud.dart';
 
 // class PlayArea extends World with HasGameReference<PlaneGame>, HasCollisionDetection {
 //   @override
@@ -28,23 +27,24 @@ import 'package:flutter_game_challenge/plane.dart';
 // }
 
 class PlayArea extends World with HasGameRef<PlaneGame> {
-  final Player player;
-  PlayArea({required this.player});
+  PlayArea();
   late RectangleComponent bottomPlatform;
   late RectangleComponent topPlatform;
   List<CollisionBlock> collisionBlocks = [];
-  late double blockSize;
 
   @override
   FutureOr<void> onLoad() async {
     debugMode = GameControls.debugMode;
 
-    blockSize = (game.height / 6);
-
     _loadPlatform();
     _loadObstacles();
 
     return super.onLoad();
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
   }
 
   void _loadObstacles() {
@@ -54,35 +54,38 @@ class PlayArea extends World with HasGameRef<PlaneGame> {
 
     double initX = 500;
 
-    List<Chicken> clouds = [];
+    // Cloud cloud = Cloud(size: Vector2.all(blockSize * 0.5), position: Vector2(500, minY));
+    // add(cloud);
 
-    for (var i = 0; i < 5; i++) {
-      if (i % 2 == 1) {
-        clouds.add(
-            Chicken(size: Vector2(cloudWidth, blockSize * 3), position: Vector2(initX + 2 * spaceBetweenClouds * i, blockSize + game.height / 6)));
-      } else {
-        clouds.add(Chicken(size: Vector2(cloudWidth, blockSize * 3), position: Vector2(initX + 2 * spaceBetweenClouds * i, game.height / 6)));
-      }
-    }
+    // List<Chicken> clouds = [];
 
-    addAll(clouds);
+    // for (var i = 0; i < 5; i++) {
+    //   if (i % 2 == 1) {
+    //     clouds.add(
+    //         Chicken(size: Vector2(cloudWidth, blockSize * 3), position: Vector2(initX + 2 * spaceBetweenClouds * i, blockSize + game.height / 6)));
+    //   } else {
+    //     clouds.add(Chicken(size: Vector2(cloudWidth, blockSize * 3), position: Vector2(initX + 2 * spaceBetweenClouds * i, game.height / 6)));
+    //   }
+    // }
+
+    // addAll(clouds);
   }
 
   _loadPlatform() {
     bottomPlatform = RectangleComponent(
       paint: Paint()..color = const Color.fromARGB(255, 86, 73, 41),
       size: Vector2(game.width, blockSize),
-      position: Vector2(0, game.height - blockSize),
+      position: Vector2(0, maxY),
     );
 
-    final bottomPlatformColissionBlock = CollisionBlock(
-      size: Vector2(game.width, blockSize),
-      position: Vector2(0, game.height - blockSize),
-    );
-    final topPlatformColissionBlock = CollisionBlock(
-      size: Vector2(game.width, blockSize),
-      position: Vector2(0, 0),
-    );
+    // final bottomPlatformColissionBlock = CollisionBlock(
+    //   size: Vector2(game.width, blockSize),
+    //   position: Vector2(0, maxY),
+    // );
+    // final topPlatformColissionBlock = CollisionBlock(
+    //   size: Vector2(game.width, blockSize),
+    //   position: Vector2(0, 0),
+    // );
 
     topPlatform = RectangleComponent(
       paint: Paint()..color = const Color(0xfff2e8cf),
@@ -90,8 +93,8 @@ class PlayArea extends World with HasGameRef<PlaneGame> {
       position: Vector2(0, 0),
     );
 
-    player.collisionBlocks = [topPlatformColissionBlock, bottomPlatformColissionBlock];
-    addAll([topPlatform, topPlatformColissionBlock, bottomPlatform, bottomPlatformColissionBlock]);
+    // player.collisionBlocks = [topPlatformColissionBlock, bottomPlatformColissionBlock];
+    addAll([topPlatform, bottomPlatform]);
   }
 
   // void _scrollingBackground() {

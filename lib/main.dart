@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/data/enums/game_characters.dart';
 import 'package:flutter_game_challenge/pixel_adventure.dart';
-import 'package:flutter_game_challenge/plane.dart';
+import 'package:flutter_game_challenge/plane_game.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

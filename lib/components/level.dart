@@ -89,13 +89,13 @@ class Level extends World with HasGameRef<PixelAdventure> {
           case 'Chicken':
             final offNeg = spawnPoint.properties.getValue('offNeg');
             final offPos = spawnPoint.properties.getValue('offPos');
-            final chicken = Chicken(
-              position: Vector2(spawnPoint.x, spawnPoint.y),
-              size: Vector2(spawnPoint.width, spawnPoint.height),
-              offNeg: offNeg,
-              offPos: offPos,
-            );
-            add(chicken);
+            // final chicken = Chicken(
+            //   position: Vector2(spawnPoint.x, spawnPoint.y),
+            //   size: Vector2(spawnPoint.width, spawnPoint.height),
+            //   offNeg: offNeg,
+            //   offPos: offPos,
+            // );
+            // add(chicken);
             break;
           default:
         }
