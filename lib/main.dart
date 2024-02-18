@@ -1,10 +1,7 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_game_challenge/data/enums/game_characters.dart';
-import 'package:flutter_game_challenge/pixel_adventure.dart';
+import 'package:flutter_game_challenge/hud/hud.dart';
 import 'package:flutter_game_challenge/plane_game.dart';
 
 void main() async {
@@ -13,7 +10,12 @@ void main() async {
   // await Flame.device.setLandscape();
 
   final game = PlaneGame(); // Modify this line
-  runApp(GameWidget(game: kDebugMode ? PlaneGame() : game));
+
+  runApp(GameWidget(
+    game: game,
+    overlayBuilderMap: gameHud,
+    initialActiveOverlays: [GameOverlay.mainMenu.name],
+  ));
 
   // PixelAdventure game = PixelAdventure();
   // runApp(
@@ -25,7 +27,7 @@ void main() async {
   //   ),
   // );
 }
-
+/* 
 class MainMenu extends StatefulWidget {
   PixelAdventure game;
   MainMenu({super.key, required this.game});
@@ -70,3 +72,4 @@ class _MainMenuState extends State<MainMenu> {
     );
   }
 }
+ */

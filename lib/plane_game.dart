@@ -7,12 +7,14 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/services/keyboard_key.g.dart';
 import 'package:flutter_game_challenge/components/obstacles/obstacles_manager.dart';
+import 'package:flutter_game_challenge/hud/hud.dart';
 import 'package:flutter_game_challenge/my_componants/plane.dart';
 import 'package:flutter_game_challenge/platfrom.dart';
 
 import 'data/constants/constants.dart';
 
-class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
+class PlaneGame extends FlameGame
+    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   // PlaneGame()
   //     : super(
   //         camera: CameraComponent.withFixedResolution(
@@ -112,5 +114,19 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
   void onTapUp(TapUpEvent event) {
     tappedDown = false;
     super.onTapUp(event);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    bool showMenu = keysPressed.contains(LogicalKeyboardKey.keyM);
+    if (showMenu) {
+      if (overlays.isActive(GameOverlay.pause.name)) {
+        overlays.remove(GameOverlay.pause.name);
+      } else {
+        overlays.add(GameOverlay.pause.name);
+      }
+    }
+
+    return super.onKeyEvent(event, keysPressed);
   }
 }

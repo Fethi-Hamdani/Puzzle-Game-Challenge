@@ -6,9 +6,14 @@ class AudioControls {
   static const soundVolume = 1.0;
   //
   // Chicken
-  static _play(String path) {
+  static _play(String path) async {
     if (GameControls.playSound) {
-      FlameAudio.play(path, volume: soundVolume);
+      try {
+        if (!FlameAudio.audioCache.loadedFiles.containsKey(path)) await FlameAudio.audioCache.load(path);
+        FlameAudio.play(path, volume: soundVolume);
+      } catch (e) {
+        print("Error playing audio: $e");
+      }
     }
   }
 
