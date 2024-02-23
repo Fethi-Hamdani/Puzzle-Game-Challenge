@@ -1,10 +1,60 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_game_challenge/hud/constants/button_colors.dart';
+import 'package:flutter_game_challenge/hud/widgets/button.dart';
+import 'package:flutter_game_challenge/plane_game.dart';
 
 class PauseScreen extends StatelessWidget {
-  const PauseScreen({super.key});
+  PlaneGame game;
+  PauseScreen({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      color: Colors.green,
+      child: const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Pause Screen', style: TextStyle(fontSize: 48)),
+            SizedBox(
+              height: 10,
+            ),
+            GameButton.text(
+              color: ButtonColor.red,
+              text: "Red Button",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            GameButton.text(
+              color: ButtonColor.grey,
+              text: "Grey Button",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            GameButton.text(
+              color: ButtonColor.yellow,
+              text: "Yellow Button",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            GameButton.text(
+              color: ButtonColor.green,
+              text: "Green Button",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            GameButton.text(
+              color: ButtonColor.red,
+              text: "EXIT",
+              outline: false,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

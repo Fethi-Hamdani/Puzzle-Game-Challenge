@@ -4,6 +4,7 @@ class GameCard extends StatelessWidget {
   final List<Color> gradientColors;
   final Color borderColor;
   final double? cornerRadius;
+  final double? borderWidth;
   final BoxShadow? shadow;
   final Widget child;
   final EdgeInsets? padding;
@@ -15,6 +16,7 @@ class GameCard extends StatelessWidget {
     this.cornerRadius,
     this.shadow,
     this.padding,
+    this.borderWidth,
   });
 
   @override
@@ -29,7 +31,7 @@ class GameCard extends StatelessWidget {
           stops: [0.25, 0.5, 0.75],
         ),
         borderRadius: BorderRadius.circular(cornerRadius ?? 10),
-        border: Border.all(color: borderColor, width: 4),
+        border: Border.all(color: borderColor, width: borderWidth ?? 4),
         boxShadow: [
           shadow ??
               BoxShadow(

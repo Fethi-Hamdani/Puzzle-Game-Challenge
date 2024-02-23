@@ -9,6 +9,7 @@ class GameButton extends StatefulWidget {
   final Widget? child;
   final BoxShadow? shadow;
   final double? cornerRadius;
+  final double? borderWidth;
   final EdgeInsets? padding;
   final String? text;
   final double? textBorderWidth;
@@ -25,6 +26,7 @@ class GameButton extends StatefulWidget {
     this.padding,
     this.onPressed,
     this.playSound = true,
+    this.borderWidth,
   })  : text = null,
         textBorderWidth = null,
         fontSize = null,
@@ -42,6 +44,7 @@ class GameButton extends StatefulWidget {
     this.outline = true,
     this.onPressed,
     this.playSound = true,
+    this.borderWidth,
   }) : child = null;
 
   @override
@@ -98,6 +101,7 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
                 fontSize: widget.fontSize,
               )
             : GameCard(
+                borderWidth: widget.borderWidth,
                 cornerRadius: widget.cornerRadius,
                 shadow: widget.shadow,
                 borderColor: widget.color.borderColor,
