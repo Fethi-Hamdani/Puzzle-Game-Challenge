@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_game_challenge/data/constants/constants.dart';
-
+import 'package:flutter_game_challenge/game_data/constants/constants.dart';
 import 'package:flutter_game_challenge/plane_game.dart';
 
 class PlanePlayer extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCallbacks {

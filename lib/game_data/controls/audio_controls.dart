@@ -1,6 +1,6 @@
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter_game_challenge/data/constants/assets_paths.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/constants/assets_paths.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
 
 class AudioControls {
   static const soundVolume = 1.0;

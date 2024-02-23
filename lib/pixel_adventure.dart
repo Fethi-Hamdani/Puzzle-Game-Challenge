@@ -9,8 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_game_challenge/components/controls/jump_button.dart';
 import 'package:flutter_game_challenge/components/level.dart';
 import 'package:flutter_game_challenge/components/player.dart';
-import 'package:flutter_game_challenge/data/enums/game_characters.dart';
-import 'package:flutter_game_challenge/data/enums/view_priority.dart';
+import 'package:flutter_game_challenge/game_data/enums/game_characters.dart';
+import 'package:flutter_game_challenge/game_data/enums/view_priority.dart';
 
 class PixelAdventure extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {

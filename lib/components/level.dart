@@ -5,14 +5,13 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter_game_challenge/components/background/background_tile.dart';
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
 import 'package:flutter_game_challenge/components/consumbles/fruit.dart';
-import 'package:flutter_game_challenge/components/obstacles/enemies/chicken.dart';
 import 'package:flutter_game_challenge/components/obstacles/hazards/saw.dart';
 import 'package:flutter_game_challenge/components/player.dart';
 import 'package:flutter_game_challenge/components/portals/checkpoint.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/enums/background_color.dart';
-import 'package:flutter_game_challenge/data/enums/fruits.dart';
-import 'package:flutter_game_challenge/data/enums/view_priority.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/enums/background_color.dart';
+import 'package:flutter_game_challenge/game_data/enums/fruits.dart';
+import 'package:flutter_game_challenge/game_data/enums/view_priority.dart';
 import 'package:flutter_game_challenge/pixel_adventure.dart';
 
 class Level extends World with HasGameRef<PixelAdventure> {

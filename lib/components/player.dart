@@ -7,13 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
 import 'package:flutter_game_challenge/components/bounding_box/custom_hitbox.dart';
 import 'package:flutter_game_challenge/components/consumbles/fruit.dart';
-import 'package:flutter_game_challenge/components/obstacles/enemies/chicken.dart';
 import 'package:flutter_game_challenge/components/obstacles/hazards/saw.dart';
 import 'package:flutter_game_challenge/components/portals/checkpoint.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/enums/game_characters.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/enums/game_characters.dart';
 import 'package:flutter_game_challenge/my_componants/cloud.dart';
-
 import 'package:flutter_game_challenge/plane_game.dart';
 
 enum PlayerState { idle, running, jumping, falling, hit, appearing, disappearing }
@@ -101,8 +99,10 @@ class Player extends SpriteAnimationGroupComponent with HasGameRef<PlaneGame>, K
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
-    final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight);
+    final isLeftKeyPressed =
+        keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed =
+        keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;

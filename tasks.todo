@@ -1,3 +1,17 @@
-☐ orgnize code
-☐ rename classes
-☐ add settings page
+✔ orgnize code @done (2/23/2024, 4:11:04 PM)
+✔ rename classes @done (2/23/2024, 4:11:05 PM)
+✔ add settings page @done (2/23/2024, 4:11:06 PM)
+
+
+
+
+Major Tasks:
+    ☐ Add local user Caching
+
+    ☐ Add google Auth
+
+    ☐ Add Cloud Firestore to save user's score
+
+    ☐ Add Google Wallet Implementation
+    
+   

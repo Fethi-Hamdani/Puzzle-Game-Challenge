@@ -1,5 +1,5 @@
-import 'package:flutter_game_challenge/data/enums/background_color.dart';
-import 'package:flutter_game_challenge/data/enums/fruits.dart';
+import 'package:flutter_game_challenge/game_data/enums/background_color.dart';
+import 'package:flutter_game_challenge/game_data/enums/fruits.dart';
 
 class GameControls {
   static bool playSound = false;

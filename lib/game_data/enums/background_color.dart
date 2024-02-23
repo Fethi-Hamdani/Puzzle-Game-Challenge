@@ -1,4 +1,4 @@
-import 'package:flutter_game_challenge/data/utils/string_extension.dart';
+import 'package:flutter_game_challenge/game_data/utils/string_extension.dart';
 
 enum BackgroundColor {
   gray,

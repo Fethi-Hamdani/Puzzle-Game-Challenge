@@ -1,5 +1,5 @@
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/utils/string_extension.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/utils/string_extension.dart';
 
 enum Fruits {
   apple,

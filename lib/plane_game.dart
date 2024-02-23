@@ -11,7 +11,7 @@ import 'package:flutter_game_challenge/hud/hud.dart';
 import 'package:flutter_game_challenge/my_componants/plane.dart';
 import 'package:flutter_game_challenge/platfrom.dart';
 
-import 'data/constants/constants.dart';
+import 'game_data/constants/constants.dart';
 
 class PlaneGame extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {

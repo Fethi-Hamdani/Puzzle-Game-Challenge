@@ -2,12 +2,12 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_game_challenge/data/constants/assets_paths.dart';
-import 'package:flutter_game_challenge/data/constants/constants.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/enums/background_color.dart';
-import 'package:flutter_game_challenge/data/enums/enemy_state.dart';
-import 'package:flutter_game_challenge/data/enums/fruits.dart';
+import 'package:flutter_game_challenge/game_data/constants/assets_paths.dart';
+import 'package:flutter_game_challenge/game_data/constants/constants.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/enums/background_color.dart';
+import 'package:flutter_game_challenge/game_data/enums/enemy_state.dart';
+import 'package:flutter_game_challenge/game_data/enums/fruits.dart';
 
 extension AssetsHandler on FlameGame {
   //

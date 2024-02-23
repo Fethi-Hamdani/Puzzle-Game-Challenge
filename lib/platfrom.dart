@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
 import 'package:flutter_game_challenge/plane_game.dart';
 
-import 'data/constants/constants.dart';
-import 'my_componants/cloud.dart';
+import 'game_data/constants/constants.dart';
 
 // class PlayArea extends World with HasGameReference<PlaneGame>, HasCollisionDetection {
 //   @override

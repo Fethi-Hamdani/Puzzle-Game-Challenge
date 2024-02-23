@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter_game_challenge/data/constants/animations.dart';
-import 'package:flutter_game_challenge/data/constants/hitboxes.dart';
-import 'package:flutter_game_challenge/data/controls/audio_controls.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/enums/fruits.dart';
-import 'package:flutter_game_challenge/data/enums/view_priority.dart';
+import 'package:flutter_game_challenge/game_data/constants/animations.dart';
+import 'package:flutter_game_challenge/game_data/constants/hitboxes.dart';
+import 'package:flutter_game_challenge/game_data/controls/audio_controls.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/enums/fruits.dart';
+import 'package:flutter_game_challenge/game_data/enums/view_priority.dart';
 import 'package:flutter_game_challenge/pixel_adventure.dart';
 
 class Fruit extends SpriteAnimationComponent with HasGameRef<PixelAdventure>, CollisionCallbacks {

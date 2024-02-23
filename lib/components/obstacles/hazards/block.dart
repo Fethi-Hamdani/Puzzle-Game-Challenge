@@ -4,11 +4,10 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
 import 'package:flutter_game_challenge/plane_game.dart';
 
-import '../../../data/constants/constants.dart';
+import '../../../game_data/constants/constants.dart';
 
 class ObstaclesBlock extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   int spaceIndex;
@@ -34,7 +33,8 @@ class ObstaclesBlock extends RectangleComponent with HasGameRef<PlaneGame>, Coll
 
       case 1:
         bloc = createhitBox(Vector2(blockSize, blockSize), Vector2(gameWidth + blockSize * 0.5, minY));
-        bloc2 = createhitBox(Vector2(blockSize, blockSize * 2), Vector2(gameWidth + blockSize * 0.5, minY + blockSize * 2));
+        bloc2 =
+            createhitBox(Vector2(blockSize, blockSize * 2), Vector2(gameWidth + blockSize * 0.5, minY + blockSize * 2));
 
       case 2:
         bloc = createhitBox(Vector2(blockSize, blockSize * 2), Vector2(gameWidth + blockSize * 0.5, minY));

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_game_challenge/data/controls/audio_controls.dart';
+import 'package:flutter_game_challenge/game_data/controls/audio_controls.dart';
 import 'package:flutter_game_challenge/hud/constants/button_colors.dart';
 import 'package:flutter_game_challenge/hud/widgets/card.dart';
 import 'package:flutter_game_challenge/hud/widgets/text.dart';
