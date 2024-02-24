@@ -29,10 +29,19 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
   late World myworld;
   late ObstacleGenerator obstacleGenerator;
   late PaperPLane plane;
+  late Shield shield;
 
   //
   double get height => size.y;
   double get width => size.x;
+
+  void addShield() {
+    world.add(shield);
+    // Add your logic to remove the shield after a certain duration
+    // Future.delayed(Duration(seconds: 5), () {
+    //   removeShield();
+    // });
+  }
 
   @override
   Color backgroundColor() {
@@ -59,7 +68,19 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     if (isR) {
       if (plane.isRemoved) {
         plane = PaperPLane();
+        shield = Shield(plane);
         world.add(plane);
+      }
+
+      return KeyEventResult.handled;
+    }
+    if (keysPressed.contains(LogicalKeyboardKey.space)) {
+      if (plane.isOnShield) {
+        removeShield();
+        plane.isOnShield = false;
+      } else {
+        addShield();
+        plane.isOnShield = true;
       }
 
       return KeyEventResult.handled;
@@ -78,6 +99,7 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     world = myworld;
     obstacleGenerator = ObstacleGenerator();
     plane = PaperPLane();
+    shield = Shield(plane);
 
     camera = CameraComponent.withFixedResolution(
       world: world,
@@ -86,7 +108,8 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     );
     camera.viewfinder.anchor = Anchor.topLeft;
 
-    await world.addAll([obstacleGenerator, plane, scoreText]);
+    // await world.addAll([obstacleGenerator, plane, scoreText]);
+    await world.addAll([plane, scoreText]);
 
     super.onLoad();
   }
@@ -101,6 +124,10 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
   void onTapUp(TapUpEvent event) {
     tappedDown = false;
     super.onTapUp(event);
+  }
+
+  void removeShield() {
+    shield.removeFromParent();
   }
 
   @override

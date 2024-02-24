@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 
 import '../../core/constants.dart';
 import '../../plane_game.dart';
 
 const PLANE_CRASH_SPRITESHEET = "Plane/crash.png";
-// const PLANE_SPRITESHEET = "Plane/plane_spritesheet.png";
+
 const PLANE_FLASH_SPRITESHEET = "Plane/plane_flash.png";
+const PLANE_SHIELD_SPRITESHEET = "Plane/plane_glow.png";
 const PLANE_SPRITESHEET = "Plane/Plane.png";
 
 class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
@@ -25,7 +29,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
 
   // animations
   late final SpriteAnimation _idleAnimation;
-
+  late final SpriteAnimation _shieldAnimation;
   late final SpriteAnimation _crashAnimation;
   late final SpriteAnimation _flashAnimation;
 
@@ -38,18 +42,24 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   late double paperwidth;
   //
   bool isCrashed = false;
-
   bool isEntrance = true;
+  bool isOnShield = false;
+
   PaperPLane() {
     verticalSpeed = 0.0;
     FLY_SPEED = -200.0;
   }
 
+  activateSheild() {
+    print('Shield Activated');
+    animation = _shieldAnimation;
+  }
+
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    print('hit');
-    if (!isEntrance) {
+
+    if (!isEntrance && !isOnShield) {
       isCrashed = true;
     }
   }
@@ -188,6 +198,11 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       srcSize: Vector2(1824, 912),
     );
 
+    final shieldSpriteSheet = SpriteSheet(
+      image: await game.images.load(PLANE_SHIELD_SPRITESHEET),
+      srcSize: Vector2(1824, 912),
+    );
+
     final crashspriteSheet = SpriteSheet(
       image: await game.images.load(PLANE_CRASH_SPRITESHEET),
       srcSize: Vector2(1609.55, 1597.87),
@@ -205,6 +220,13 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       stepTime: 0.25,
     );
 
+    _shieldAnimation = shieldSpriteSheet.createAnimation(
+      row: 0,
+      from: 0,
+      to: 2,
+      stepTime: 0.1,
+    );
+
     _crashAnimation = crashspriteSheet.createAnimation(
       row: 0,
       from: 0,
@@ -218,5 +240,45 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       to: 2,
       stepTime: 0.1,
     );
+  }
+}
+
+class Shield extends PositionComponent {
+  late double SHIELD_RADIUS;
+  final PaperPLane plane;
+
+  Shield(this.plane) {
+    SHIELD_RADIUS = blockSize * 0.8;
+  }
+
+  @override
+  FutureOr<void> onLoad() {
+    // TODO: implement onLoad
+
+    size = Vector2(SHIELD_RADIUS, SHIELD_RADIUS);
+    // position = Vector2(0, 0);
+    super.onLoad();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    // Draw outline for shield
+    canvas.drawCircle(
+      Offset(plane.x, plane.y),
+      SHIELD_RADIUS,
+      Paint()
+        ..color = Colors.blue
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0, // Adjust outline thickness as needed
+    );
+  }
+
+  @override
+  void update(double dt) {
+    // TODO: implement update
+    super.update(dt);
+    if (plane.x <= 0) {
+      removeFromParent();
+    }
   }
 }
