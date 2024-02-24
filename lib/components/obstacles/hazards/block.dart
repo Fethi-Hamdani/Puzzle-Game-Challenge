@@ -4,25 +4,36 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
-import 'package:flutter_game_challenge/plane_game.dart';
+import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 
 import '../../../data/constants/constants.dart';
 
 class ObstaclesBlock extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   int spaceIndex;
-  ObstaclesBlock({required this.spaceIndex, super.size, super.position});
-
   final double speed = 150;
 
   late CollisionBlock collisionBlock = CollisionBlock(
     position: position,
     size: size,
   );
+
   Paint cloudColor = Paint()..color = Colors.white;
   late ShapeHitbox bloc;
   ShapeHitbox? bloc2;
+  ObstaclesBlock({required this.spaceIndex, super.size, super.position});
+
+  void collidedWithPlayer() async {
+    // player.collidedwithEnemy();
+  }
+
+  ShapeHitbox createhitBox(Vector2 size, Vector2 position) {
+    return RectangleHitbox()
+      ..size = size
+      ..position = position
+      ..paint = cloudColor
+      ..renderShape = true;
+  }
 
   @override
   FutureOr<void> onLoad() {
@@ -55,14 +66,6 @@ class ObstaclesBlock extends RectangleComponent with HasGameRef<PlaneGame>, Coll
     return super.onLoad();
   }
 
-  ShapeHitbox createhitBox(Vector2 size, Vector2 position) {
-    return RectangleHitbox()
-      ..size = size
-      ..position = position
-      ..paint = cloudColor
-      ..renderShape = true;
-  }
-
   @override
   void update(double dt) {
     x -= speed * dt;
@@ -71,9 +74,5 @@ class ObstaclesBlock extends RectangleComponent with HasGameRef<PlaneGame>, Coll
       // x = gameWidth + width;
     }
     super.update(dt);
-  }
-
-  void collidedWithPlayer() async {
-    // player.collidedwithEnemy();
   }
 }

@@ -4,9 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/components/bounding_box/collision_block.dart';
-import 'package:flutter_game_challenge/plane_game.dart';
-
-import '../data/constants/constants.dart';
+import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 
 class Cloud extends RectangleComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   Cloud({
