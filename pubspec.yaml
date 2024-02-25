@@ -1,10 +1,10 @@
 name: flutter_game_challenge
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.2.5 <4.0.0'
+  sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
   flutter:
@@ -14,28 +14,47 @@ dependencies:
   flame: ^1.8.2
   flame_tiled: ^1.11.0
   flame_audio: ^2.0.5
+  flame_forge2d: ^0.16.0+4
+  flame_svg: ^1.8.9
+
+  freezed: ^2.4.1
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+
+  shared_preferences: ^2.0.8
+  google_sign_in: ^6.2.1
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
+  
 
 flutter:
   uses-material-design: true
 
   #To add assets to your application, add an assets section, like this:
   assets:
-   - assets/audio/
-   - assets/tiles/
-   - assets/images/Background/
-   - assets/images/Terrain/
-   - assets/images/HUD/
-   - assets/images/Traps/Saw/
-   - assets/images/Items/Checkpoints/Checkpoint/
-   - assets/images/Items/Fruits/
-   - assets/images/Main Characters/
-   - assets/images/Main Characters/Mask Dude/
-   - assets/images/Main Characters/Ninja Frog/
-   - assets/images/Main Characters/Pink Man/
-   - assets/images/Main Characters/Virtual Guy/
-   - assets/images/Enemies/Chicken/
+    - assets/audio/
+    - assets/tiles/
+    - assets/images/Background/
+    - assets/images/Background/parallax/
+    - assets/images/Background/p/
+    - assets/images/Terrain/
+    - assets/images/HUD/
+    - assets/images/Acid/
+    - assets/images/Plane/
+    - assets/images/Traps/Saw/
+    - assets/images/Items/Checkpoints/Checkpoint/
+    - assets/images/Items/Fruits/
+    - assets/images/Main Characters/
+    - assets/images/Main Characters/Mask Dude/
+    - assets/images/Main Characters/Ninja Frog/
+    - assets/images/Main Characters/Pink Man/
+    - assets/images/Main Characters/Virtual Guy/
+    - assets/images/Enemies/Chicken/
+    - assets/images/Enemies/RushingCloud/
+    - assets/svg/Plane/

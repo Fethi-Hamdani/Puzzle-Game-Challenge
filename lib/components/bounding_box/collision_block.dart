@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter_game_challenge/components/player.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
 
 class CollisionBlock extends PositionComponent {
   bool isPlatform;
