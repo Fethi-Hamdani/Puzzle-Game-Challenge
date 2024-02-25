@@ -10,8 +10,8 @@ class PauseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.green,
-      child: const Center(
+      color: Colors.green.withOpacity(0.5),
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -20,37 +20,21 @@ class PauseScreen extends StatelessWidget {
               height: 10,
             ),
             GameButton.text(
-              color: ButtonColor.red,
-              text: "Red Button",
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GameButton.text(
-              color: ButtonColor.grey,
-              text: "Grey Button",
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GameButton.text(
-              color: ButtonColor.yellow,
-              text: "Yellow Button",
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GameButton.text(
               color: ButtonColor.green,
-              text: "Green Button",
+              text: "Continue",
+              onPressed: () {
+                game.resume();
+              },
             ),
             SizedBox(
               height: 10,
             ),
             GameButton.text(
               color: ButtonColor.red,
-              text: "EXIT",
-              outline: false,
+              text: "Exit",
+            ),
+            SizedBox(
+              height: 10,
             ),
           ],
         ),

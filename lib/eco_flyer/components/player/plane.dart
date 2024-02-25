@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
 
 import '../../core/constants.dart';
 import '../../plane_game.dart';
@@ -50,7 +49,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     FLY_SPEED = -200.0;
   }
 
-  activateSheild() {
+  void activateSheild() {
     print('Shield Activated');
     animation = _shieldAnimation;
   }
@@ -86,6 +85,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     } else if (isCrashed) {
       _crash(dt);
     } else {
+      if (!game.isGamePlaying) return;
       _fly(dt);
     }
   }
@@ -240,45 +240,5 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       to: 2,
       stepTime: 0.1,
     );
-  }
-}
-
-class Shield extends PositionComponent {
-  late double SHIELD_RADIUS;
-  final PaperPLane plane;
-
-  Shield(this.plane) {
-    SHIELD_RADIUS = blockSize * 0.8;
-  }
-
-  @override
-  FutureOr<void> onLoad() {
-    // TODO: implement onLoad
-
-    size = Vector2(SHIELD_RADIUS, SHIELD_RADIUS);
-    // position = Vector2(0, 0);
-    super.onLoad();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    // Draw outline for shield
-    canvas.drawCircle(
-      Offset(plane.x, plane.y),
-      SHIELD_RADIUS,
-      Paint()
-        ..color = Colors.blue
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0, // Adjust outline thickness as needed
-    );
-  }
-
-  @override
-  void update(double dt) {
-    // TODO: implement update
-    super.update(dt);
-    if (plane.x <= 0) {
-      removeFromParent();
-    }
   }
 }

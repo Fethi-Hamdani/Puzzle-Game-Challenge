@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[300],
+      color: Colors.grey.withOpacity(0.5),
       padding: EdgeInsets.all(20),
       child: Center(
         child: Row(
@@ -40,6 +40,7 @@ class _MainScreenState extends State<MainScreen> {
                 fontSize: 30,
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                 onPressed: () {
+                  widget.game.resume();
                   widget.game.overlays.remove(GameOverlay.mainMenu.name);
                 },
               ),

@@ -8,12 +8,15 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_game_challenge/eco_flyer/components/platform/platfrom.dart';
+import 'package:flutter_game_challenge/eco_flyer/components/powerups/sheild.dart';
+import 'package:flutter_game_challenge/hud/hud.dart';
 
 import 'components/obstacles/obstacles_generator.dart';
 import 'components/player/plane.dart';
 import 'core/constants.dart';
 
-class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
+class PlaneGame extends FlameGame
+    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   bool tappedDown = false;
 
   //Score
@@ -26,10 +29,10 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     ..x = width / 2 // size is a property from game
     ..y = 32.0;
   // objects
-  late World myworld;
   late ObstacleGenerator obstacleGenerator;
   late PaperPLane plane;
   late Shield shield;
+  bool isGamePlaying = false;
 
   //
   double get height => size.y;
@@ -63,9 +66,12 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
   @override
   KeyEventResult onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     super.onKeyEvent(event, keysPressed);
-    final isR = keysPressed.contains(LogicalKeyboardKey.keyR);
+    final button_R = keysPressed.contains(LogicalKeyboardKey.keyR);
+    final button_Space = keysPressed.contains(LogicalKeyboardKey.space);
+    final button_M = keysPressed.contains(LogicalKeyboardKey.keyM);
 
-    if (isR) {
+    if (button_R) {
+      if (!isGamePlaying) return KeyEventResult.ignored;
       if (plane.isRemoved) {
         plane = PaperPLane();
         shield = Shield(plane);
@@ -74,7 +80,8 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
 
       return KeyEventResult.handled;
     }
-    if (keysPressed.contains(LogicalKeyboardKey.space)) {
+    if (button_Space) {
+      if (!isGamePlaying) return KeyEventResult.ignored;
       if (plane.isOnShield) {
         removeShield();
         plane.isOnShield = false;
@@ -85,7 +92,25 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
 
       return KeyEventResult.handled;
     }
+    if (button_M) {
+      if (overlays.isActive(GameOverlay.pause.name)) {
+        resume();
+      } else {
+        pause();
+      }
+      return KeyEventResult.handled;
+    }
     return KeyEventResult.ignored;
+  }
+
+  void pause() {
+    isGamePlaying = false;
+    overlays.add(GameOverlay.pause.name);
+  }
+
+  void resume() {
+    isGamePlaying = true;
+    overlays.remove(GameOverlay.pause.name);
   }
 
   @override
@@ -95,11 +120,10 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     await images.loadAllImages();
 
     initDimensions();
-    myworld = Platform();
-    world = myworld;
+    world = Platform();
     obstacleGenerator = ObstacleGenerator();
     plane = PaperPLane();
-    shield = Shield(plane);
+    //shield = Shield(plane);
 
     camera = CameraComponent.withFixedResolution(
       world: world,
