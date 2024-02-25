@@ -293,7 +293,7 @@ packages:
     dependency: "direct main"
     description:
       name: flame_forge2d
-      sha256: "3d0d694c79a6cea624db4a995cb8189509b06ac9d4366584d07dfd99aecbb30f"
+      sha256: "9914d836dfb0cf642300a1640d82488707ab4d230cbb6aa6e14228c9d4de3379"
       url: "https://pub.dev"
     source: hosted
     version: "0.16.0+4"
@@ -967,4 +967,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.2.3 <4.0.0"
-  flutter: ">=3.13.0"
+  flutter: ">=3.16.6"
