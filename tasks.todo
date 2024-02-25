@@ -1,3 +1,14 @@
 ☐ orgnize code
 ☐ rename classes
 ☐ add settings page
+
+☐ Scahe pobell with anti power up to resolve
+
+GamePlay improvements:
+    ☐ remove upper kill and replace with barrier
+    ☐ crash animation acceleration
+    ☐ respawn acceleration
+    ☐ add lives count (3 lives per stage)
+    ☐ on click fly up for a bit
+    ☐ add PowerUps collection (3 max)
+    ☐ add start/pause game functionalities

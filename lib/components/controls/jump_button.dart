@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flutter_game_challenge/data/constants/assets_paths.dart';
-import 'package:flutter_game_challenge/data/controls/game_controls.dart';
-import 'package:flutter_game_challenge/data/enums/view_priority.dart';
+import 'package:flutter_game_challenge/game_data/constants/assets_paths.dart';
+import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/game_data/enums/view_priority.dart';
 import 'package:flutter_game_challenge/pixel_adventure.dart';
 
 class JumpButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
