@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 import 'package:flutter_game_challenge/hud/constants/button_colors.dart';
 import 'package:flutter_game_challenge/hud/constants/colors.dart';
-import 'package:flutter_game_challenge/hud/hud.dart';
 import 'package:flutter_game_challenge/hud/widgets/button.dart';
 import 'package:flutter_game_challenge/hud/widgets/icon.dart';
 import 'package:flutter_game_challenge/hud/widgets/text.dart';
@@ -40,8 +39,7 @@ class _MainScreenState extends State<MainScreen> {
                 fontSize: 30,
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                 onPressed: () {
-                  widget.game.resume();
-                  widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                  widget.game.start();
                 },
               ),
             ]),

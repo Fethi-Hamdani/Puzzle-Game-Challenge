@@ -19,7 +19,14 @@ class Platform extends World with HasGameRef<PlaneGame> {
 
   _loadPlatform() {
     background = Background();
-
     add(background);
+  }
+
+  void stopBackground() {
+    background.parallax?.baseVelocity = Vector2(0, 0);
+  }
+
+  void startBackground() {
+    background.parallax?.baseVelocity = Vector2(20, 0);
   }
 }

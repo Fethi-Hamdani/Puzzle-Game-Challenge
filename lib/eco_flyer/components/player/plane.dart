@@ -49,7 +49,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     FLY_SPEED = -200.0;
   }
 
-  void activateSheild() {
+  void activateShield() {
     print('Shield Activated');
     animation = _shieldAnimation;
   }
@@ -57,7 +57,6 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-
     if (!isEntrance && !isOnShield) {
       isCrashed = true;
     }
@@ -81,6 +80,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     super.update(dt);
 
     if (isEntrance) {
+      if (!game.isGameStarted) return;
       _entranceFly(dt);
     } else if (isCrashed) {
       _crash(dt);
@@ -90,7 +90,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     }
   }
 
-  _crash(double dt) {
+  void _crash(double dt) {
     // Apply gravity
     verticalSpeed += GRAVITY * dt;
 
@@ -134,16 +134,17 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     }
   }
 
-  _entranceFly(double dt) {
+  void _entranceFly(double dt) {
+    const velocity = 3;
     angle = 0;
-    x += 120 * dt;
+    x += 120 * dt * velocity;
     if (x >= planeFixedX) {
       isEntrance = false;
       animation = _idleAnimation;
     }
   }
 
-  _fly(double dt) {
+  void _fly(double dt) {
     // Apply gravity
     verticalSpeed += GRAVITY * dt;
 
@@ -231,7 +232,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       row: 0,
       from: 0,
       to: 7,
-      stepTime: 0.2,
+      stepTime: 0.1,
       loop: false,
     );
     _flashAnimation = flashspriteSheet.createAnimation(

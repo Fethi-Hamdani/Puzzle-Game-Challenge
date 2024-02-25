@@ -33,6 +33,7 @@ class PlaneGame extends FlameGame
   late PaperPLane plane;
   late Shield shield;
   bool isGamePlaying = false;
+  bool isGameStarted = false;
 
   //
   double get height => size.y;
@@ -55,11 +56,11 @@ class PlaneGame extends FlameGame
   void initDimensions() {
     // init variables
     blockSize = size.y / 6;
-    maxY = size.y - blockSize * 0.8;
+    maxY = size.y - blockSize * 0.9;
     minY = blockSize / 2;
     gameHeight = size.y;
     gameWidth = size.x;
-    planeFixedX = gameWidth * 0.25;
+    planeFixedX = gameWidth * 0.15;
     planeFixedY = gameHeight * 0.5;
   }
 
@@ -103,14 +104,25 @@ class PlaneGame extends FlameGame
     return KeyEventResult.ignored;
   }
 
+  void start() {
+    isGameStarted = true;
+    overlays.remove(GameOverlay.mainMenu.name);
+    resume(easyResume: false);
+  }
+
   void pause() {
     isGamePlaying = false;
+    (world as Platform).stopBackground();
     overlays.add(GameOverlay.pause.name);
   }
 
-  void resume() {
-    isGamePlaying = true;
+  Future<void> resume({bool easyResume = true}) async {
     overlays.remove(GameOverlay.pause.name);
+    if (easyResume) {
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+    isGamePlaying = true;
+    (world as Platform).startBackground();
   }
 
   @override
