@@ -10,26 +10,12 @@ import 'package:flutter_game_challenge/game_data/enums/enemy_state.dart';
 import 'package:flutter_game_challenge/game_data/enums/fruits.dart';
 
 extension AssetsHandler on FlameGame {
-  //
-  // Background
-  Future<Parallax> loadAnimatedBackground(BackgroundColor? color) async {
-    return await loadParallax(
-      [ParallaxImageData(color?.path ?? GameControls.defaultBackgroundColor.path)],
-      baseVelocity: Vector2(0, -backgroundScrollingSpeed),
-      repeat: ImageRepeat.repeat,
-      fill: LayerFill.none,
-    );
-  }
-
-  //
-  // CheckPoint
-
-  SpriteAnimation checkPointNoFlagAnimation() {
+  SpriteAnimation checkPointFlagIdleAnimation() {
     return SpriteAnimation.fromFrameData(
-      images.fromCache(checkPointNoFlagAnimationPath),
+      images.fromCache(checkPointFlagIdleAnimationPath),
       SpriteAnimationData.sequenced(
-        amount: 1,
-        stepTime: 1,
+        amount: 10,
+        stepTime: 0.05,
         textureSize: Vector2.all(flagAssetSize),
       ),
     );
@@ -47,12 +33,15 @@ extension AssetsHandler on FlameGame {
     );
   }
 
-  SpriteAnimation checkPointFlagIdleAnimation() {
+  //
+  // CheckPoint
+
+  SpriteAnimation checkPointNoFlagAnimation() {
     return SpriteAnimation.fromFrameData(
-      images.fromCache(checkPointFlagIdleAnimationPath),
+      images.fromCache(checkPointNoFlagAnimationPath),
       SpriteAnimationData.sequenced(
-        amount: 10,
-        stepTime: 0.05,
+        amount: 1,
+        stepTime: 1,
         textureSize: Vector2.all(flagAssetSize),
       ),
     );
@@ -95,6 +84,17 @@ extension AssetsHandler on FlameGame {
         textureSize: Vector2.all(fruitAssetSize),
         loop: false,
       ),
+    );
+  }
+
+  //
+  // Background
+  Future<Parallax> loadAnimatedBackground(BackgroundColor? color) async {
+    return await loadParallax(
+      [ParallaxImageData(color?.path ?? GameControls.defaultBackgroundColor.path)],
+      baseVelocity: Vector2(0, -backgroundScrollingSpeed),
+      repeat: ImageRepeat.repeat,
+      fill: LayerFill.none,
     );
   }
 }

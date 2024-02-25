@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 import 'package:flutter_game_challenge/hud/constants/button_colors.dart';
 import 'package:flutter_game_challenge/hud/widgets/button.dart';
-import 'package:flutter_game_challenge/plane_game.dart';
 
 class PauseScreen extends StatelessWidget {
   PlaneGame game;

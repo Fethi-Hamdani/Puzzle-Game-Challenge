@@ -10,23 +10,27 @@ const double backgroundTileSize = 64;
 
 const double flagAssetSize = 64;
 
+// Fruits
+
+const double fruitAssetSize = 32;
+
+late double blockSize;
+
 // Enemy
 
 // Chicken
 
 final Vector2 chickenAssetSize = Vector2(32, 34);
+late double gameHeight;
 
-// Fruits
-
-const double fruitAssetSize = 32;
+// Game dim
+late double gameWidth;
 
 // the ground Y wich the player will crash on hit
 late double maxY;
 // the highest point the player can reach wich will be the default Y
 late double minY;
 
-late double blockSize;
-
-// Game dim
-late double gameWidth;
-late double gameHeight;
+double obstaclesMaxSpeed = 500;
+//
+double obstaclesSpeed = 120;

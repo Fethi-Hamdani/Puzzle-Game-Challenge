@@ -1,17 +1,13 @@
-✔ orgnize code @done (2/23/2024, 4:11:04 PM)
-✔ rename classes @done (2/23/2024, 4:11:05 PM)
-✔ add settings page @done (2/23/2024, 4:11:06 PM)
+☐ orgnize code
+☐ rename classes
+☐ add settings page
 
+☐ Scahe pobell with anti power up to resolve
 
-
-
-Major Tasks:
-    ✔ Add local user Caching @done (2/23/2024, 5:33:48 PM)
-
-    ☐ Add google Auth
-
-    ☐ Add Cloud Firestore to save user's score
-
-    ☐ Add Google Wallet Implementation
-    
-   
+GamePlay improvements:
+    ☐ remove upper kill and replace with barrier
+    ☐ crash animation acceleration
+    ☐ respawn acceleration
+    ☐ add lives count (3 lives per stage)
+    ☐ on click fly up for a bit
+    ☐ add PowerUps collection (3 max)

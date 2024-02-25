@@ -2,10 +2,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-
-import '../../game_data/constants/constants.dart';
-import '../../my_componants/cloud.dart';
-import '../../plane_game.dart';
+import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 
 class ObstaclesManager extends Component with HasGameRef<PlaneGame> {
   // Random generator required for randomly selecting enemy type.
@@ -18,46 +15,48 @@ class ObstaclesManager extends Component with HasGameRef<PlaneGame> {
     _timer.onTick = spawnObstacles;
   }
 
+  @override
+  void onMount() {
+    _timer.start();
+    super.onMount();
+  }
+
   void spawnObstacles() {
     int randomNumber = _random.nextInt(4);
-    Cloud cloud = Cloud();
-    Cloud? cloud2;
+    // RushingCloud cloud = RushingCloud();
+    // Tree tree = Tree();
 
-    switch (randomNumber) {
-      case 0:
-        cloud = Cloud(
-            size: Vector2(blockSize, blockSize * 3), position: Vector2(gameWidth + blockSize * 0.5, minY + blockSize));
+    // game.world.add(cloud);
 
-      case 1:
-        cloud = Cloud(size: Vector2(blockSize, blockSize), position: Vector2(gameWidth + blockSize * 0.5, minY));
-        cloud2 = Cloud(
-            size: Vector2(blockSize, blockSize * 2),
-            position: Vector2(gameWidth + blockSize * 0.5, minY + blockSize * 2));
+    // game.world.add(tree);
+    // Tree? tree;
 
-      case 2:
-        cloud = Cloud(size: Vector2(blockSize, blockSize * 2), position: Vector2(gameWidth + blockSize * 0.5, minY));
-        cloud2 = Cloud(
-            size: Vector2(blockSize, blockSize), position: Vector2(gameWidth + blockSize * 0.5, minY + blockSize * 3));
-      case 3:
-        cloud = Cloud(size: Vector2(blockSize, blockSize * 3), position: Vector2(gameWidth + blockSize * 0.5, minY));
-    }
+    // switch (1) {
+    //   case 0:
+    //     cloud = Cloud(size: Vector2(blockSize, blockSize * 3), position: Vector2(gameWidth + blockSize * 0.5, minY + blockSize));
 
-    game.world.add(cloud);
+    //   case 1:
+    //     cloud = Cloud(size: Vector2(blockSize, blockSize), position: Vector2(gameWidth + blockSize * 0.5, minY));
+    //     // cloud2 = Cloud(size: Vector2(blockSize, blockSize * 2), position: Vector2(gameWidth + blockSize * 0.5, minY + blockSize * 2));
+    //     tree = Tree();
 
-    if (cloud2 != null) {
-      game.world.add(cloud2);
-    }
+    //   case 2:
+    //     cloud = Cloud(size: Vector2(blockSize, blockSize * 2), position: Vector2(gameWidth + blockSize * 0.5, minY));
+    //   // cloud2 = Cloud(size: Vector2(blockSize, blockSize), position: Vector2(gameWidth + blockSize * 0.5, minY + blockSize * 3));
+    //   case 3:
+    //     cloud = Cloud(size: Vector2(blockSize, blockSize * 3), position: Vector2(gameWidth + blockSize * 0.5, minY));
+    // }
+
+    // game.world.add(cloud);
+
+    // if (tree != null) {
+    //   game.world.add(tree);
+    // }
   }
 
   @override
   void update(double dt) {
     _timer.update(dt);
     super.update(dt);
-  }
-
-  @override
-  void onMount() {
-    _timer.start();
-    super.onMount();
   }
 }

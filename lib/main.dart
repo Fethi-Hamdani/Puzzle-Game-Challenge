@@ -1,13 +1,13 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 import 'package:flutter_game_challenge/hud/hud.dart';
-import 'package:flutter_game_challenge/plane_game.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
-  // await Flame.device.setLandscape();
+  await Flame.device.setLandscape();
 
   final game = PlaneGame(); // Modify this line
 
