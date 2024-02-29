@@ -5,13 +5,26 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_game_challenge/eco_flyer/components/platform/platfrom.dart';
+import 'package:flutter_game_challenge/eco_flyer/core/local_storage.dart';
+import 'package:flutter_game_challenge/hud/constants/audio.dart';
 
 import 'components/obstacles/obstacles_generator.dart';
+import 'components/platform/background.dart';
 import 'components/player/plane.dart';
 import 'core/constants.dart';
+
+bool getMusicLocalSettings() {
+  dynamic musicData = LocalStorage().getData(key: "music");
+  return musicData ?? musicData;
+}
+
+bool getSoundLocalSettings() {
+  dynamic soundData = LocalStorage().getData(key: "sound");
+  return soundData ?? soundData;
+}
 
 class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   bool tappedDown = false;
@@ -26,7 +39,7 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     ..x = width / 2 // size is a property from game
     ..y = 32.0;
   // objects
-  late World myworld;
+  late Background background;
   late ObstacleGenerator obstacleGenerator;
   late PaperPLane plane;
   late Shield shield;
@@ -58,6 +71,12 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     gameWidth = size.x;
     planeFixedX = gameWidth * 0.25;
     planeFixedY = gameHeight * 0.5;
+  }
+
+  @override
+  void onDispose() {
+    FlameAudio.bgm.stop();
+    super.onDispose();
   }
 
   @override
@@ -93,10 +112,13 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     // debugMode = true;
 
     await images.loadAllImages();
+    _initMusicSettings();
 
     initDimensions();
-    myworld = Platform();
-    world = myworld;
+    // myworld = Platform();
+    // world = myworld;
+    background = Background();
+
     obstacleGenerator = ObstacleGenerator();
     plane = PaperPLane();
     shield = Shield(plane);
@@ -109,7 +131,8 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     camera.viewfinder.anchor = Anchor.topLeft;
 
     // await world.addAll([obstacleGenerator, plane, scoreText]);
-    await world.addAll([plane, scoreText]);
+    await world.addAll([background, scoreText]);
+    background.parallax!.baseVelocity = Vector2.zero();
 
     super.onLoad();
   }
@@ -130,6 +153,11 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     shield.removeFromParent();
   }
 
+  startGame() async {
+    await world.add(plane);
+    background.parallax!.baseVelocity = Vector2(20, 0);
+  }
+
   @override
   void update(double dt) {
     if (tappedDown) {
@@ -138,5 +166,13 @@ class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbac
     score += (60 * dt).toInt();
     scoreText.text = score.toString();
     super.update(dt);
+  }
+
+  _initMusicSettings() {
+    bool music = getMusicLocalSettings();
+    FlameAudio.bgm.initialize();
+    if (music && !FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.play(Audio.mainSong, volume: 1);
+    }
   }
 }
