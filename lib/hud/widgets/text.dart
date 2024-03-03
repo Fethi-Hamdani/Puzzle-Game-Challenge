@@ -7,6 +7,7 @@ class GameText extends StatelessWidget {
   final double? borderWidth;
   final String text;
   final double? fontSize;
+  final bool showShadow;
   const GameText({
     super.key,
     required this.text,
@@ -14,22 +15,24 @@ class GameText extends StatelessWidget {
     this.borderWidth,
     this.fontSize,
     this.textColor,
+    this.showShadow = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Text(
-          text,
-          style: buttonStyle.copyWith(
-            fontSize: fontSize,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = borderWidth ?? 4
-              ..color = borderColor,
+        if (showShadow)
+          Text(
+            text,
+            style: buttonStyle.copyWith(
+              fontSize: fontSize,
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = borderWidth ?? 4
+                ..color = borderColor,
+            ),
           ),
-        ),
         Text(
           text,
           style: buttonStyle.copyWith(fontSize: fontSize, color: textColor),

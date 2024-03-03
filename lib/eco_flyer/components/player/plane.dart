@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter_game_challenge/eco_flyer/components/consumbles/coin.dart';
 
 import '../../core/constants.dart';
 import '../../plane_game.dart';
@@ -12,11 +13,13 @@ const PLANE_CRASH_SPRITESHEET = "Plane/crash.png";
 const PLANE_FLASH_SPRITESHEET = "Plane/plane_flash.png";
 const PLANE_SHIELD_SPRITESHEET = "Plane/plane_glow.png";
 const PLANE_SPRITESHEET = "Plane/Plane.png";
+const PLANE_ACID_SPRITESHEET = "Plane/acid_sprite.png";
+const PLANE_FIRE_SPRITESHEET = "Plane/fire_sprite.png";
 
 class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   static const double GRAVITY = 600.0;
 
-  static const double MAX_SPEED = 500.0;
+  static const double MAX_SPEED = 800.0;
   //
   static const double ANGLE_UP = -0.5;
   static const double ANGLE_DOWN = 0.8;
@@ -31,6 +34,8 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   late final SpriteAnimation _shieldAnimation;
   late final SpriteAnimation _crashAnimation;
   late final SpriteAnimation _flashAnimation;
+  late final SpriteAnimation _fireAnimation;
+  late final SpriteAnimation _acidAnimation;
 
   bool isFlyingUp = false;
 
@@ -43,6 +48,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   bool isCrashed = false;
   bool isEntrance = true;
   bool isOnShield = false;
+  bool canBeKilled = false;
 
   PaperPLane() {
     verticalSpeed = 0.0;
@@ -57,8 +63,22 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if (other is Coin && !isCrashed) {
+      other.consumed();
+      return;
+    }
     if (!isEntrance && !isOnShield) {
       isCrashed = true;
+      if (canBeKilled) {
+        animation = _acidAnimation;
+        game.reduceLife();
+        canBeKilled = false;
+      }
+      if (game.lives > 0) {
+        game.respawn();
+      } else {
+        game.terminateGame();
+      }
     }
   }
 
@@ -71,8 +91,12 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     position = Vector2(-paperwidth, planeFixedY - paperHeight / 2);
 
     anchor = Anchor.center;
-    add(RectangleHitbox());
+    add(RectangleHitbox(
+      position: Vector2(20, 5),
+      size: Vector2(paperwidth - 20, paperHeight - 10),
+    ));
     await _loadAnimations().then((_) => {animation = _flashAnimation});
+    Future.delayed(const Duration(seconds: 1)).then((value) => {canBeKilled = true});
   }
 
   @override
@@ -155,9 +179,8 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
 
     // Adjust vertical position based on user input
     if (isFlyingUp) {
-      verticalSpeed = FLY_SPEED;
+      verticalSpeed = FLY_SPEED * 1.5;
       targetAngle = ANGLE_UP; // Rotate plane upwards when flying up
-      isFlyingUp = false;
     } else {
       targetAngle = ANGLE_DOWN; // Rotate plane downwards when falling
     }
@@ -199,6 +222,11 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       srcSize: Vector2(1824, 912),
     );
 
+    final spriteSheet_fire = SpriteSheet(
+      image: await game.images.load(PLANE_FIRE_SPRITESHEET),
+      srcSize: Vector2(1824, 912),
+    );
+
     final shieldSpriteSheet = SpriteSheet(
       image: await game.images.load(PLANE_SHIELD_SPRITESHEET),
       srcSize: Vector2(1824, 912),
@@ -220,6 +248,24 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       to: 1,
       stepTime: 0.25,
     );
+
+    _fireAnimation = SpriteAnimation.fromFrameData(
+        game.images.fromCache(PLANE_FIRE_SPRITESHEET),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.05,
+          textureSize: Vector2(1824, 912),
+          loop: false,
+        ));
+
+    _acidAnimation = SpriteAnimation.fromFrameData(
+        game.images.fromCache(PLANE_ACID_SPRITESHEET),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.05,
+          textureSize: Vector2(1824, 912),
+          loop: false,
+        ));
 
     _shieldAnimation = shieldSpriteSheet.createAnimation(
       row: 0,

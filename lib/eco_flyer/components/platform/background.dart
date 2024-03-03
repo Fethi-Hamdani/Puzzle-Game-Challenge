@@ -13,7 +13,6 @@ class Background extends ParallaxComponent<PlaneGame> with HasGameRef<PlaneGame>
 
   @override
   Future<void> onLoad() async {
-    debugMode = true;
     bottomPlatform = RectangleHitbox(
       size: Vector2(game.width, game.height - maxY),
       position: Vector2(0, maxY),
@@ -22,7 +21,7 @@ class Background extends ParallaxComponent<PlaneGame> with HasGameRef<PlaneGame>
     topPlatform = RectangleHitbox(
       size: Vector2(game.width, minY),
       position: Vector2(0, 0),
-      collisionType: CollisionType.passive,
+      collisionType: CollisionType.inactive,
     );
     parallax = await gameRef.loadParallax(
       [

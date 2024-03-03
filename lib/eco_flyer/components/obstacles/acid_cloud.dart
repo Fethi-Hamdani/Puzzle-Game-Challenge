@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -7,18 +8,33 @@ import 'package:flame/sprite.dart';
 import '../../core/constants.dart';
 import '../../plane_game.dart';
 
+const darkCloudSpritesheet = "Acid/dark_cloud.png";
+
 class AcidCloud extends SpriteAnimationComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
+  final int drops_space = 20;
   final Timer _timer = Timer(2, repeat: true);
 
   //
   late final SpriteAnimation _darkCloudAnimation;
-  final darkCloudSpritesheet = "Acid/dark_cloud.png";
 
   //
   late double cloudHeight;
-  late double cloudwidth;
+  late double cloudWidth;
 
-  AcidCloud() {
+  final double widthFactor;
+  final double heightFactor;
+  final bool canSpawnDoubleDrips;
+
+  AcidCloud()
+      : heightFactor = 0.5,
+        canSpawnDoubleDrips = false,
+        widthFactor = 0.75 {
+    _timer.onTick = _spawnDrips;
+  }
+  AcidCloud.large()
+      : heightFactor = 0.5,
+        canSpawnDoubleDrips = true,
+        widthFactor = 1 {
     _timer.onTick = _spawnDrips;
   }
 
@@ -26,10 +42,10 @@ class AcidCloud extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Col
   FutureOr<void> onLoad() async {
     super.onLoad();
 
-    cloudwidth = blockSize * 1.5;
-    cloudHeight = cloudwidth * 0.68;
+    cloudWidth = blockSize * widthFactor;
+    cloudHeight = cloudWidth * heightFactor;
 
-    size = Vector2(cloudwidth, cloudHeight);
+    size = Vector2(cloudWidth, cloudHeight);
     position = Vector2(gameWidth + width, minY);
 
     priority = 1;
@@ -70,11 +86,39 @@ class AcidCloud extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Col
     );
   }
 
-  _spawnDrips() {
-    AcidCloudDrip acidCloudDrip = AcidCloudDrip()..position = Vector2(x, y);
-    print(acidCloudDrip.width);
-    double dropX = x + (width / 2) - (blockSize * 0.3 / 1.68) / 2;
-    game.world.add(acidCloudDrip..position = Vector2(dropX, y));
+  void _spawnDrips() {
+    if (canSpawnDoubleDrips) {
+      bool delay_first = Random(DateTime.now().millisecondsSinceEpoch).nextBool();
+      AcidCloudDrip acidCloudDrip1 = AcidCloudDrip.slow()..position = Vector2(x, y);
+      AcidCloudDrip acidCloudDrip2 = AcidCloudDrip.slow()..position = Vector2(x, y);
+
+      if (delay_first) {
+        double drop1X = x - drops_space + (width / 2) - (blockSize * 0.3 / 1.68) / 2;
+        game.world.add(acidCloudDrip1..position = Vector2(drop1X, y));
+        Future.delayed(
+          const Duration(milliseconds: 200),
+          () {
+            double drop2X = x + drops_space + (width / 2) - (blockSize * 0.3 / 1.68) / 2;
+            game.world.add(acidCloudDrip2..position = Vector2(drop2X, y));
+          },
+        );
+      } else {
+        double drop1X = x + drops_space + (width / 2) - (blockSize * 0.3 / 1.68) / 2;
+        game.world.add(acidCloudDrip1..position = Vector2(drop1X, y));
+        Future.delayed(
+          const Duration(milliseconds: 200),
+          () {
+            double drop2X = x - drops_space + (width / 2) - (blockSize * 0.3 / 1.68) / 2;
+            game.world.add(acidCloudDrip2..position = Vector2(drop2X, y));
+          },
+        );
+      }
+    } else {
+      AcidCloudDrip acidCloudDrip = AcidCloudDrip()..position = Vector2(x, y);
+
+      double dropX = x + (width / 2) - (blockSize * 0.3 / 1.68) / 2;
+      game.world.add(acidCloudDrip..position = Vector2(dropX, y));
+    }
   }
 }
 
@@ -88,9 +132,12 @@ class AcidCloudDrip extends SpriteAnimationComponent with HasGameRef<PlaneGame>,
   final splashSpritesheet = "Acid/splash.png";
 
   final double dripHeight = blockSize * 0.3;
-  final double speed = 200;
+  final double speed;
   bool hitTheGround = false;
   bool positionUpdate = false;
+
+  AcidCloudDrip() : speed = 300;
+  AcidCloudDrip.slow() : speed = 200;
 
   @override
   FutureOr<void> onLoad() async {
@@ -156,7 +203,7 @@ class AcidCloudDrip extends SpriteAnimationComponent with HasGameRef<PlaneGame>,
       row: 0,
       from: 0,
       to: 4,
-      stepTime: 0.1,
+      stepTime: 0.05,
       loop: false,
     );
   }
