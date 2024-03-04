@@ -55,6 +55,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   GameButton(
                     onPressed: () {
                       widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                      widget.game.overlays.add(GameOverlay.fortuneWheel.name);
+                    },
+                    color: ButtonColor.green,
+                    child: const GameIcon(
+                      icon: Icons.published_with_changes_outlined,
+                      iconColor: Colors.redAccent,
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  GameButton(
+                    onPressed: () {
+                      widget.game.overlays.remove(GameOverlay.mainMenu.name);
                       widget.game.overlays.add(GameOverlay.settings.name);
                     },
                     color: ButtonColor.green,
@@ -64,80 +76,20 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     ),
                   ),
                   const SizedBox(width: 16.0),
-                  const GameButton(
+                  GameButton(
+                    onPressed: () {
+                      widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                      widget.game.overlays.add(GameOverlay.shop.name);
+                    },
                     color: ButtonColor.green,
-                    child: GameIcon(
+                    child: const GameIcon(
                       icon: Icons.shopping_cart,
                       iconColor: Colors.redAccent,
                     ),
                   ),
                 ],
               ),
-              // GameButton.text(
-              //   color: ButtonColor.green,
-              //   text: "Settings".toUpperCase(),
-              //   fontSize: 30,
-              //   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-              //   onPressed: () {
-              //     // widget.game.overlays.remove(GameOverlay.mainMenu.name);
-              //     // game.startGame();
-              //   },
-              // ),
             ]),
-            // Column(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   crossAxisAlignment: CrossAxisAlignment.end,
-            //   mainAxisSize: MainAxisSize.max,
-            //   children: [
-            //     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            //       GameButton(
-            //         borderWidth: 3,
-            //         color: ButtonColor(yellowLinearGradient, redBorderColor),
-            //         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            //         onPressed: () {
-            //           //  widget.game.overlays.remove(GameOverlay.mainMenu.name);
-            //         },
-            //         child: GameIcon(
-            //           icon: Icons.volume_up_rounded,
-            //           size: 40,
-            //           iconColor: ButtonColor.red.borderColor,
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 10,
-            //       ),
-            //       GameButton(
-            //         borderWidth: 3,
-            //         color: ButtonColor(yellowLinearGradient, redBorderColor),
-            //         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            //         onPressed: () {
-            //           //  widget.game.overlays.remove(GameOverlay.mainMenu.name);
-            //         },
-            //         child: GameIcon(
-            //           icon: Icons.settings,
-            //           size: 40,
-            //           iconColor: ButtonColor.red.borderColor,
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 10,
-            //       ),
-            //       GameButton(
-            //         borderWidth: 3,
-            //         color: ButtonColor(yellowLinearGradient, redBorderColor),
-            //         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            //         onPressed: () {
-            //           //  widget.game.overlays.remove(GameOverlay.mainMenu.name);
-            //         },
-            //         child: GameIcon(
-            //           icon: Icons.music_note_outlined,
-            //           size: 40,
-            //           iconColor: ButtonColor.red.borderColor,
-            //         ),
-            //       ),
-            //     ]),
-            //   ],
-            // ),
           ],
         ),
       ),
@@ -153,6 +105,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
   }
 }

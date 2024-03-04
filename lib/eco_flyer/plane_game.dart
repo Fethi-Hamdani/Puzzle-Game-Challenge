@@ -18,12 +18,12 @@ import 'core/constants.dart';
 
 bool getMusicLocalSettings() {
   dynamic musicData = LocalStorage().getData(key: "music");
-  return musicData ?? musicData;
+  return musicData == null ? true : musicData;
 }
 
 bool getSoundLocalSettings() {
   dynamic soundData = LocalStorage().getData(key: "sound");
-  return soundData ?? soundData;
+  return soundData == null ? true : soundData;
 }
 
 class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
