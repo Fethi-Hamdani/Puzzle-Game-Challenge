@@ -21,7 +21,7 @@ class GameIcon extends StatelessWidget {
         Shadow(
           color: iconColor.withOpacity(0.5),
           blurRadius: 0,
-          offset: Offset(0, 2),
+          offset: const Offset(0, 2),
         ),
       ],
     );
