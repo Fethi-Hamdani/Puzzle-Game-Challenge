@@ -5,18 +5,31 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_game_challenge/eco_flyer/components/consumbles/coin.dart';
 import 'package:flutter_game_challenge/eco_flyer/components/consumbles/coin_generator.dart';
-import 'package:flutter_game_challenge/eco_flyer/components/platform/platfrom.dart';
 import 'package:flutter_game_challenge/eco_flyer/components/powerups/sheild.dart';
+import 'package:flutter_game_challenge/eco_flyer/core/local_storage.dart';
 import 'package:flutter_game_challenge/game_data/controls/game_controls.dart';
+import 'package:flutter_game_challenge/hud/constants/audio.dart';
 import 'package:flutter_game_challenge/hud/hud.dart';
 
 import 'components/obstacles/obstacles_generator.dart';
+import 'components/platform/background.dart';
 import 'components/player/plane.dart';
 import 'core/constants.dart';
+
+bool getMusicLocalSettings() {
+  dynamic musicData = LocalStorage().getData(key: "music");
+  return musicData ?? true;
+}
+
+bool getSoundLocalSettings() {
+  dynamic soundData = LocalStorage().getData(key: "sound");
+  return soundData ?? true;
+}
 
 class PlaneGame extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
@@ -41,6 +54,7 @@ class PlaneGame extends FlameGame
     ..x = width * 0.05 // size is a property from game
     ..y = height * 0.02;
   // objects
+  late Background background;
   late ObstacleGenerator obstacleGenerator;
   late CoinGenerator coinGenerator;
   late PaperPLane plane;
@@ -79,6 +93,12 @@ class PlaneGame extends FlameGame
     gameWidth = size.x;
     planeFixedX = gameWidth * 0.15;
     planeFixedY = gameHeight * 0.5;
+  }
+
+  @override
+  void onDispose() {
+    FlameAudio.bgm.stop();
+    super.onDispose();
   }
 
   @override
@@ -126,7 +146,7 @@ class PlaneGame extends FlameGame
 
   void stopGame() {
     isGamePlaying = false;
-    (world as Platform).stopBackground();
+    background.parallax!.baseVelocity = Vector2(0, 0);
   }
 
   void pause() {
@@ -142,7 +162,7 @@ class PlaneGame extends FlameGame
     if (!isGameStarted) {
       isGameStarted = true;
     }
-    (world as Platform).startBackground();
+    background.parallax!.baseVelocity = Vector2(20, 0);
   }
 
   @override
@@ -150,11 +170,16 @@ class PlaneGame extends FlameGame
     // debugMode = true;
 
     await images.loadAllImages();
+    _initMusicSettings();
 
     initDimensions();
-    world = Platform();
+    // myworld = Platform();
+    // world = myworld;
+    background = Background();
+
     obstacleGenerator = ObstacleGenerator();
     plane = PaperPLane();
+    plane.canBeKilled = true;
     coinGenerator = CoinGenerator();
 
     camera = CameraComponent.withFixedResolution(
@@ -165,6 +190,7 @@ class PlaneGame extends FlameGame
     camera.viewfinder.anchor = Anchor.topLeft;
 
     await world.addAll([
+      background,
       plane,
       obstacleGenerator,
       coinGenerator,
@@ -172,6 +198,7 @@ class PlaneGame extends FlameGame
       livesText,
       coinsText,
     ]);
+    background.parallax?.baseVelocity = Vector2.zero();
 
     super.onLoad();
   }
@@ -262,5 +289,13 @@ class PlaneGame extends FlameGame
   void exitToMainScreen() {
     overlays.removeAll(GameOverlay.values.map((e) => e.name).toList());
     overlays.add(GameOverlay.mainMenu.name);
+  }
+
+  _initMusicSettings() {
+    bool music = getMusicLocalSettings();
+    FlameAudio.bgm.initialize();
+    if (music && !FlameAudio.bgm.isPlaying) {
+      FlameAudio.bgm.play(Audio.mainSong, volume: 1);
+    }
   }
 }

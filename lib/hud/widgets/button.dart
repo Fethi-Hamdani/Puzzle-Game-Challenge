@@ -56,32 +56,6 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
   late AnimationController _controller;
   final Duration duration = const Duration(milliseconds: 100);
   @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: duration,
-      reverseDuration: duration,
-    );
-    animation = CurvedAnimation(
-        parent: Tween<double>(begin: 1, end: widget.text != null ? 0.8 : 0.9).animate(_controller),
-        curve: Curves.linear);
-    _controller.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(() {
-      setState(() {});
-    });
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -106,7 +80,7 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
                 shadow: widget.shadow,
                 borderColor: widget.color.borderColor,
                 gradientColors: widget.color.gradientColors,
-                padding: widget.padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 32.0),
+                padding: widget.padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 16.0),
                 child: widget.text != null
                     ? GameText(
                         text: widget.text!,
@@ -118,5 +92,29 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
               ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(() {
+      setState(() {});
+    });
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: duration,
+      reverseDuration: duration,
+    );
+    animation = CurvedAnimation(parent: Tween<double>(begin: 1, end: widget.text != null ? 0.8 : 0.9).animate(_controller), curve: Curves.linear);
+    _controller.addListener(() {
+      setState(() {});
+    });
   }
 }
