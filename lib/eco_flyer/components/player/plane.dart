@@ -67,15 +67,13 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       other.consumed();
       return;
     }
-    if (!isEntrance && !isOnShield) {
+    if (!isOnShield && canBeKilled) {
       isCrashed = true;
-      if (canBeKilled) {
-        animation = _acidAnimation;
-        game.reduceLife();
-        canBeKilled = false;
-      }
+      animation = _acidAnimation;
+      game.reduceLife();
+      canBeKilled = false;
       if (game.lives > 0) {
-        game.respawn();
+        game.respawn(delay: false);
       } else {
         game.terminateGame();
       }
@@ -95,8 +93,8 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       position: Vector2(20, 5),
       size: Vector2(paperwidth - 20, paperHeight - 10),
     ));
-    await _loadAnimations().then((_) => {animation = _flashAnimation});
-    Future.delayed(const Duration(seconds: 1)).then((value) => {canBeKilled = true});
+    await _loadAnimations();
+    animation = _flashAnimation;
   }
 
   @override
@@ -114,7 +112,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     }
   }
 
-  void _crash(double dt) {
+  Future<void> _crash(double dt) async {
     // Apply gravity
     verticalSpeed += GRAVITY * dt;
 
@@ -158,12 +156,13 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     }
   }
 
-  void _entranceFly(double dt) {
+  Future<void> _entranceFly(double dt) async {
     const velocity = 3;
     angle = 0;
     x += 120 * dt * velocity;
     if (x >= planeFixedX) {
       isEntrance = false;
+      canBeKilled = true;
       animation = _idleAnimation;
     }
   }

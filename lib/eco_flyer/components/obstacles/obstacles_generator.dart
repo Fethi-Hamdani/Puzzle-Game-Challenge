@@ -14,15 +14,17 @@ class ObstacleGenerator extends Component with HasGameRef<PlaneGame> {
   bool firstObject = true;
   final double _speedScalingFactor = 0.5;
   final double _minDistanceBetweenObstacles = blockSize * 2; // Adjust as needed
-
+  Duration _obstacleSpawnRate = Duration(milliseconds: 1000);
+  bool canSpawn = true;
   void generateObstacles(double dt) {
-    if (!game.isGamePlaying) return;
+    if (!game.isGamePlaying || !canSpawn) return;
 
-    obstaclesSpeed = obstaclesSpeed >= 500 ? 500 : obstaclesSpeed + dt;
-
-    if (_lastGeneratedCloud.x + blockSize + _minDistanceBetweenObstacles < game.width || firstObject) {
-      _controlObjectsBasedOnScore();
-    }
+    _obstacleSpawnRate = Duration(seconds: _controlSpacingbasedOnScore());
+    _controlObjectsBasedOnScore();
+    canSpawn = false;
+    Future.delayed(_obstacleSpawnRate, () {
+      canSpawn = true;
+    });
   }
 
   @override
@@ -51,5 +53,17 @@ class ObstacleGenerator extends Component with HasGameRef<PlaneGame> {
 
     game.world.add(acidCloud);
     _lastGeneratedCloud = acidCloud;
+  }
+
+  int _controlSpacingbasedOnScore() {
+    return 1;
+    if (game.score > 600) {
+      return Random(DateTime.now().millisecondsSinceEpoch).nextInt(1) + 3;
+    }
+    if (game.score < 600) {
+      return Random(DateTime.now().millisecondsSinceEpoch).nextInt(1) + 5;
+    }
+
+    return 4;
   }
 }

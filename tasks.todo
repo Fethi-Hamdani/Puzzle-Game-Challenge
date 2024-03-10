@@ -21,4 +21,8 @@ GamePlay improvements:
     ✔ add coins collection @done (3/3/2024, 6:01:40 PM)
     ✔ shrinked the upper and lower bounds @done (3/3/2024, 6:01:39 PM)
     ✔ enhance mounting speed @done (3/3/2024, 6:01:25 PM)
-    ☐ make the drop horizontal speed static
+    ✔ make the drop horizontal speed static @done (3/3/2024, 6:53:47 PM)
+    ✔ randomize space between obstacles @done (3/3/2024, 7:14:34 PM)
+    ☐ randomize drop spawn time
+    ☐ randomize drop spacing in large clouds
+    ☐ when could is purified it drops coins

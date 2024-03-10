@@ -133,6 +133,7 @@ class AcidCloudDrip extends SpriteAnimationComponent with HasGameRef<PlaneGame>,
 
   final double dripHeight = blockSize * 0.3;
   final double speed;
+  final double horizantal_speed = 200;
   bool hitTheGround = false;
   bool positionUpdate = false;
 
@@ -172,7 +173,7 @@ class AcidCloudDrip extends SpriteAnimationComponent with HasGameRef<PlaneGame>,
       }
     }
 
-    x -= obstaclesSpeed * dt;
+    x -= horizantal_speed * dt;
     if (x + width < 0) {
       removeFromParent();
       // x = game.width;
