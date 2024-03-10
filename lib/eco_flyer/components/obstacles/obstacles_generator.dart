@@ -5,21 +5,17 @@ import 'package:flame/components.dart';
 import 'package:flutter_game_challenge/eco_flyer/components/obstacles/acid_cloud.dart';
 import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 
-import '../../core/constants.dart';
-
 class ObstacleGenerator extends Component with HasGameRef<PlaneGame> {
   late SpriteAnimationComponent acidCloud;
 
   SpriteAnimationComponent _lastGeneratedCloud = AcidCloud();
   bool firstObject = true;
-  final double _speedScalingFactor = 0.5;
-  final double _minDistanceBetweenObstacles = blockSize * 2; // Adjust as needed
   Duration _obstacleSpawnRate = Duration(milliseconds: 1000);
   bool canSpawn = true;
   void generateObstacles(double dt) {
     if (!game.isGamePlaying || !canSpawn) return;
 
-    _obstacleSpawnRate = Duration(seconds: _controlSpacingbasedOnScore());
+    _obstacleSpawnRate = Duration(seconds: _controlSpacingBasedOnScore());
     _controlObjectsBasedOnScore();
     canSpawn = false;
     Future.delayed(_obstacleSpawnRate, () {
@@ -55,8 +51,7 @@ class ObstacleGenerator extends Component with HasGameRef<PlaneGame> {
     _lastGeneratedCloud = acidCloud;
   }
 
-  int _controlSpacingbasedOnScore() {
-    return 1;
+  int _controlSpacingBasedOnScore() {
     if (game.score > 600) {
       return Random(DateTime.now().millisecondsSinceEpoch).nextInt(1) + 3;
     }

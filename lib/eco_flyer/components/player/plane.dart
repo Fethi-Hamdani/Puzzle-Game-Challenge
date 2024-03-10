@@ -72,11 +72,6 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       animation = _acidAnimation;
       game.reduceLife();
       canBeKilled = false;
-      if (game.lives > 0) {
-        game.respawn(delay: false);
-      } else {
-        game.terminateGame();
-      }
     }
   }
 
@@ -151,7 +146,14 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       angle = 0;
       animation = _crashAnimation;
       if (animationTicker!.isLastFrame) {
-        Future.delayed(const Duration(milliseconds: 150)).then((value) => removeFromParent());
+        Future.delayed(const Duration(milliseconds: 150)).then((value) {
+          removeFromParent();
+          if (game.lives > 0) {
+            game.respawn(delay: false);
+          } else {
+            game.terminateGame();
+          }
+        });
       }
     }
   }

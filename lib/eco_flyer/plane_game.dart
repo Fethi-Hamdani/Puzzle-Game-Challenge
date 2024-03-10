@@ -229,6 +229,7 @@ class PlaneGame extends FlameGame
 
   void collectCoin(Coin coin) {
     coinsCollected += coin.value;
+    score += coin.value;
   }
 
   void reset() {
