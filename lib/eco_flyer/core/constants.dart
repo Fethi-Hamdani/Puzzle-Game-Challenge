@@ -14,7 +14,7 @@ late double minY;
 double obstaclesMaxSpeed = 500;
 
 //
-double obstaclesSpeed = 120;
+double obstaclesSpeed = 200;
 //
 late double planeFixedX;
 late double planeFixedY;

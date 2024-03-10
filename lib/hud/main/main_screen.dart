@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                   onPressed: () {
                     widget.game.overlays.remove(GameOverlay.mainMenu.name);
-                    game.startGame();
+                    game.start();
                   },
                 ),
               ),

@@ -21,6 +21,7 @@ class Background extends ParallaxComponent<PlaneGame> with HasGameRef<PlaneGame>
     topPlatform = RectangleHitbox(
       size: Vector2(game.width, minY),
       position: Vector2(0, 0),
+      collisionType: CollisionType.inactive,
     );
     parallax = await gameRef.loadParallax(
       [

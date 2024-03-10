@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_game_challenge/eco_flyer/components/consumbles/coin.dart';
 
 import '../../core/constants.dart';
 import '../../plane_game.dart';
@@ -13,11 +13,13 @@ const PLANE_CRASH_SPRITESHEET = "Plane/crash.png";
 const PLANE_FLASH_SPRITESHEET = "Plane/plane_flash.png";
 const PLANE_SHIELD_SPRITESHEET = "Plane/plane_glow.png";
 const PLANE_SPRITESHEET = "Plane/Plane.png";
+const PLANE_ACID_SPRITESHEET = "Plane/acid_sprite.png";
+const PLANE_FIRE_SPRITESHEET = "Plane/fire_sprite.png";
 
 class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   static const double GRAVITY = 600.0;
 
-  static const double MAX_SPEED = 500.0;
+  static const double MAX_SPEED = 800.0;
   //
   static const double ANGLE_UP = -0.5;
   static const double ANGLE_DOWN = 0.8;
@@ -32,6 +34,8 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   late final SpriteAnimation _shieldAnimation;
   late final SpriteAnimation _crashAnimation;
   late final SpriteAnimation _flashAnimation;
+  late final SpriteAnimation _fireAnimation;
+  late final SpriteAnimation _acidAnimation;
 
   bool isFlyingUp = false;
 
@@ -44,13 +48,14 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   bool isCrashed = false;
   bool isEntrance = true;
   bool isOnShield = false;
+  bool canBeKilled = false;
 
   PaperPLane() {
     verticalSpeed = 0.0;
     FLY_SPEED = -200.0;
   }
 
-  activateSheild() {
+  void activateShield() {
     print('Shield Activated');
     animation = _shieldAnimation;
   }
@@ -58,9 +63,15 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-
-    if (!isEntrance && !isOnShield) {
+    if (other is Coin && !isCrashed) {
+      other.consumed();
+      return;
+    }
+    if (!isOnShield && canBeKilled) {
       isCrashed = true;
+      animation = _acidAnimation;
+      game.reduceLife();
+      canBeKilled = false;
     }
   }
 
@@ -73,8 +84,12 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     position = Vector2(-paperwidth, planeFixedY - paperHeight / 2);
 
     anchor = Anchor.center;
-    add(RectangleHitbox());
-    await _loadAnimations().then((_) => {animation = _flashAnimation});
+    add(RectangleHitbox(
+      position: Vector2(20, 5),
+      size: Vector2(paperwidth - 20, paperHeight - 10),
+    ));
+    await _loadAnimations();
+    animation = _flashAnimation;
   }
 
   @override
@@ -82,15 +97,17 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     super.update(dt);
 
     if (isEntrance) {
+      if (!game.isGameStarted) return;
       _entranceFly(dt);
     } else if (isCrashed) {
       _crash(dt);
     } else {
+      if (!game.isGamePlaying) return;
       _fly(dt);
     }
   }
 
-  _crash(double dt) {
+  Future<void> _crash(double dt) async {
     // Apply gravity
     verticalSpeed += GRAVITY * dt;
 
@@ -129,21 +146,30 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       angle = 0;
       animation = _crashAnimation;
       if (animationTicker!.isLastFrame) {
-        Future.delayed(const Duration(milliseconds: 150)).then((value) => removeFromParent());
+        Future.delayed(const Duration(milliseconds: 150)).then((value) {
+          removeFromParent();
+          if (game.lives > 0) {
+            game.respawn(delay: false);
+          } else {
+            game.terminateGame();
+          }
+        });
       }
     }
   }
 
-  _entranceFly(double dt) {
+  Future<void> _entranceFly(double dt) async {
+    const velocity = 3;
     angle = 0;
-    x += 120 * dt;
+    x += 120 * dt * velocity;
     if (x >= planeFixedX) {
       isEntrance = false;
+      canBeKilled = true;
       animation = _idleAnimation;
     }
   }
 
-  _fly(double dt) {
+  void _fly(double dt) {
     // Apply gravity
     verticalSpeed += GRAVITY * dt;
 
@@ -154,9 +180,8 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
 
     // Adjust vertical position based on user input
     if (isFlyingUp) {
-      verticalSpeed = FLY_SPEED;
+      verticalSpeed = FLY_SPEED * 1.5;
       targetAngle = ANGLE_UP; // Rotate plane upwards when flying up
-      isFlyingUp = false;
     } else {
       targetAngle = ANGLE_DOWN; // Rotate plane downwards when falling
     }
@@ -198,6 +223,11 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       srcSize: Vector2(1824, 912),
     );
 
+    final spriteSheet_fire = SpriteSheet(
+      image: await game.images.load(PLANE_FIRE_SPRITESHEET),
+      srcSize: Vector2(1824, 912),
+    );
+
     final shieldSpriteSheet = SpriteSheet(
       image: await game.images.load(PLANE_SHIELD_SPRITESHEET),
       srcSize: Vector2(1824, 912),
@@ -220,6 +250,24 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       stepTime: 0.25,
     );
 
+    _fireAnimation = SpriteAnimation.fromFrameData(
+        game.images.fromCache(PLANE_FIRE_SPRITESHEET),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.05,
+          textureSize: Vector2(1824, 912),
+          loop: false,
+        ));
+
+    _acidAnimation = SpriteAnimation.fromFrameData(
+        game.images.fromCache(PLANE_ACID_SPRITESHEET),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.05,
+          textureSize: Vector2(1824, 912),
+          loop: false,
+        ));
+
     _shieldAnimation = shieldSpriteSheet.createAnimation(
       row: 0,
       from: 0,
@@ -231,7 +279,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       row: 0,
       from: 0,
       to: 7,
-      stepTime: 0.2,
+      stepTime: 0.1,
       loop: false,
     );
     _flashAnimation = flashspriteSheet.createAnimation(
@@ -240,45 +288,5 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       to: 2,
       stepTime: 0.1,
     );
-  }
-}
-
-class Shield extends PositionComponent {
-  late double SHIELD_RADIUS;
-  final PaperPLane plane;
-
-  Shield(this.plane) {
-    SHIELD_RADIUS = blockSize * 0.8;
-  }
-
-  @override
-  FutureOr<void> onLoad() {
-    // TODO: implement onLoad
-
-    size = Vector2(SHIELD_RADIUS, SHIELD_RADIUS);
-    // position = Vector2(0, 0);
-    super.onLoad();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    // Draw outline for shield
-    canvas.drawCircle(
-      Offset(plane.x, plane.y),
-      SHIELD_RADIUS,
-      Paint()
-        ..color = Colors.blue
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0, // Adjust outline thickness as needed
-    );
-  }
-
-  @override
-  void update(double dt) {
-    // TODO: implement update
-    super.update(dt);
-    if (plane.x <= 0) {
-      removeFromParent();
-    }
   }
 }
