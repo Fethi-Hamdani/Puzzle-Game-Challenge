@@ -24,74 +24,98 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     return Container(
       // color: Colors.grey[300],
       padding: const EdgeInsets.all(20),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              GameText(
-                text: "Eco Fly",
-                borderColor: ButtonColor.yellow.borderColor,
-                borderWidth: 2,
-                textColor: redBorderColor,
-                fontSize: 60,
-              ),
-              const SizedBox(height: 20),
-              FadeTransition(
-                opacity: _controller,
-                child: GameButton.text(
-                  color: ButtonColor.green,
-                  text: "PLAY",
-                  fontSize: 30,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                  onPressed: () {
-                    widget.game.overlays.remove(GameOverlay.mainMenu.name);
-                    game.startGame();
-                  },
-                ),
-              ),
-              Row(
-                children: [
-                  GameButton(
-                    onPressed: () {
-                      widget.game.overlays.remove(GameOverlay.mainMenu.name);
-                      widget.game.overlays.add(GameOverlay.fortuneWheel.name);
-                    },
-                    color: ButtonColor.green,
-                    child: const GameIcon(
-                      icon: Icons.published_with_changes_outlined,
-                      iconColor: Colors.redAccent,
+      child: Stack(
+        children: [
+          // Column(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     GameText(
+          //       text: playerInfo.gold.toString(),
+          //       borderColor: ButtonColor.yellow.borderColor,
+          //       borderWidth: 2,
+          //       textColor: redBorderColor,
+          //       fontSize: 24,
+          //     ),
+          //     GameText(
+          //       text: playerInfo.diamond.toString(),
+          //       borderColor: ButtonColor.yellow.borderColor,
+          //       borderWidth: 2,
+          //       textColor: redBorderColor,
+          //       fontSize: 24,
+          //     ),
+          //   ],
+          // ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                  GameText(
+                    text: "Eco Fly",
+                    borderColor: ButtonColor.yellow.borderColor,
+                    borderWidth: 2,
+                    textColor: redBorderColor,
+                    fontSize: 60,
+                  ),
+                  const SizedBox(height: 20),
+                  FadeTransition(
+                    opacity: _controller,
+                    child: GameButton.text(
+                      color: ButtonColor.green,
+                      text: "PLAY",
+                      fontSize: 30,
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                      onPressed: () {
+                        widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                        game.startGame();
+                      },
                     ),
                   ),
-                  const SizedBox(width: 16.0),
-                  GameButton(
-                    onPressed: () {
-                      widget.game.overlays.remove(GameOverlay.mainMenu.name);
-                      widget.game.overlays.add(GameOverlay.settings.name);
-                    },
-                    color: ButtonColor.green,
-                    child: const GameIcon(
-                      icon: Icons.settings,
-                      iconColor: Colors.redAccent,
-                    ),
+                  Row(
+                    children: [
+                      GameButton(
+                        onPressed: () {
+                          widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                          widget.game.overlays.add(GameOverlay.fortuneWheel.name);
+                        },
+                        color: ButtonColor.green,
+                        child: const GameIcon(
+                          icon: Icons.published_with_changes_outlined,
+                          iconColor: Colors.redAccent,
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+                      GameButton(
+                        onPressed: () {
+                          widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                          widget.game.overlays.add(GameOverlay.settings.name);
+                        },
+                        color: ButtonColor.green,
+                        child: const GameIcon(
+                          icon: Icons.settings,
+                          iconColor: Colors.redAccent,
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+                      GameButton(
+                        onPressed: () {
+                          widget.game.overlays.remove(GameOverlay.mainMenu.name);
+                          widget.game.overlays.add(GameOverlay.shop.name);
+                        },
+                        color: ButtonColor.green,
+                        child: const GameIcon(
+                          icon: Icons.shopping_cart,
+                          iconColor: Colors.redAccent,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16.0),
-                  GameButton(
-                    onPressed: () {
-                      widget.game.overlays.remove(GameOverlay.mainMenu.name);
-                      widget.game.overlays.add(GameOverlay.shop.name);
-                    },
-                    color: ButtonColor.green,
-                    child: const GameIcon(
-                      icon: Icons.shopping_cart,
-                      iconColor: Colors.redAccent,
-                    ),
-                  ),
-                ],
-              ),
-            ]),
-          ],
-        ),
+                ]),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

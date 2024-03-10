@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_game_challenge/eco_flyer/core/assets.dart';
+import 'package:flutter_game_challenge/hud/shop/models/shop_item.dart';
 import 'package:flutter_game_challenge/hud/shop/widgets/shop_items.dart';
 
 import '../../eco_flyer/plane_game.dart';
@@ -6,29 +8,121 @@ import '../constants/button_colors.dart';
 import '../hud.dart';
 import '../widgets/button.dart';
 import '../widgets/overlay_header.dart';
+import 'models/diamond.dart';
 
 class ShopScreen extends StatefulWidget {
-  static const List skins = [
-    "skin1",
-    "skin2",
-    "skin3",
-    "skin4",
-    "skin5",
+  static List<ShopItem> skins = [
+    Diamond(
+        name: "Diamond pack 1",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 1.00, currency: "\$"),
+        priceJA: Price(amount: 150, currency: "¥"),
+        locked: true,
+        quantity: 100),
+    Diamond(
+        name: "Diamond pack 2",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 1.5, currency: "\$"),
+        priceJA: Price(amount: 223, currency: "¥"),
+        locked: true,
+        quantity: 250),
+    Diamond(
+        name: "Diamond pack 3",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 2.5, currency: "\$"),
+        priceJA: Price(amount: 373, currency: "¥"),
+        locked: true,
+        quantity: 500),
+    Diamond(
+        name: "Diamond pack 4",
+        image: GameAssets.diamond2,
+        priceEN: Price(amount: 5, currency: "\$"),
+        priceJA: Price(amount: 746, currency: "¥"),
+        locked: true,
+        quantity: 1000),
+    Diamond(
+        name: "Diamond pack 5",
+        image: GameAssets.diamond2,
+        priceEN: Price(amount: 7.5, currency: "\$"),
+        priceJA: Price(amount: 1119, currency: "¥"),
+        locked: true,
+        quantity: 1500),
   ];
-  static const List coins = [
-    "coin1",
-    "coin2",
-    "coin3",
-    "coin4",
-    "coin5",
+  static List<ShopItem> diamonds = [
+    Diamond(
+        name: "Diamond pack 1",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 1.00, currency: "\$"),
+        priceJA: Price(amount: 150, currency: "¥"),
+        locked: true,
+        quantity: 100),
+    Diamond(
+        name: "Diamond pack 2",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 1.5, currency: "\$"),
+        priceJA: Price(amount: 223, currency: "¥"),
+        locked: true,
+        quantity: 250),
+    Diamond(
+        name: "Diamond pack 3",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 2.5, currency: "\$"),
+        priceJA: Price(amount: 373, currency: "¥"),
+        locked: true,
+        quantity: 500),
+    Diamond(
+        name: "Diamond pack 4",
+        image: GameAssets.diamond2,
+        priceEN: Price(amount: 5, currency: "\$"),
+        priceJA: Price(amount: 746, currency: "¥"),
+        locked: true,
+        quantity: 1000),
+    Diamond(
+        name: "Diamond pack 5",
+        image: GameAssets.diamond2,
+        priceEN: Price(amount: 7.5, currency: "\$"),
+        priceJA: Price(amount: 1119, currency: "¥"),
+        locked: true,
+        quantity: 1500),
   ];
-  static const List diamonds = [
-    "diamond1",
-    "diamond2",
-    "diamond3",
-    "diamond4",
-    "diamond5",
+  static List<ShopItem> coins = [
+    Diamond(
+        name: "Diamond pack 1",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 1.00, currency: "\$"),
+        priceJA: Price(amount: 150, currency: "¥"),
+        locked: true,
+        quantity: 100),
+    Diamond(
+        name: "Diamond pack 2",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 1.5, currency: "\$"),
+        priceJA: Price(amount: 223, currency: "¥"),
+        locked: true,
+        quantity: 250),
+    Diamond(
+        name: "Diamond pack 3",
+        image: GameAssets.diamond1,
+        priceEN: Price(amount: 2.5, currency: "\$"),
+        priceJA: Price(amount: 373, currency: "¥"),
+        locked: true,
+        quantity: 500),
+    Diamond(
+        name: "Diamond pack 4",
+        image: GameAssets.diamond2,
+        priceEN: Price(amount: 5, currency: "\$"),
+        priceJA: Price(amount: 746, currency: "¥"),
+        locked: true,
+        quantity: 1000),
+    Diamond(
+        name: "Diamond pack 5",
+        image: GameAssets.diamond2,
+        priceEN: Price(amount: 7.5, currency: "\$"),
+        priceJA: Price(amount: 1119, currency: "¥"),
+        locked: true,
+        quantity: 1500),
   ];
+
   final PlaneGame game;
   const ShopScreen({super.key, required this.game});
 
@@ -68,7 +162,7 @@ class _ShopScreenState extends State<ShopScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GameButton.text(
-                  color: ButtonColor.green,
+                  color: ButtonColor.yellow,
                   text: "Skins".toUpperCase(),
                   fontSize: 16,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
@@ -81,7 +175,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 ),
                 const SizedBox(width: 24.0),
                 GameButton.text(
-                  color: ButtonColor.green,
+                  color: ButtonColor.yellow,
                   text: "Coins".toUpperCase(),
                   fontSize: 16,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
@@ -94,7 +188,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 ),
                 const SizedBox(width: 24.0),
                 GameButton.text(
-                  color: ButtonColor.green,
+                  color: ButtonColor.yellow,
                   text: "Diamonds".toUpperCase(),
                   fontSize: 16,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),

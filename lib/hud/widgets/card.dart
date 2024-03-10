@@ -28,7 +28,7 @@ class GameCard extends StatelessWidget {
           colors: gradientColors,
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          stops: [0.25, 0.5, 0.75],
+          stops: const [0.25, 0.5, 0.75],
         ),
         borderRadius: BorderRadius.circular(cornerRadius ?? 10),
         border: Border.all(color: borderColor, width: borderWidth ?? 4),
@@ -38,7 +38,7 @@ class GameCard extends StatelessWidget {
                 color: Colors.black.withOpacity(0.25),
                 spreadRadius: 0,
                 blurRadius: 4,
-                offset: Offset(0, 4), // changes position of shadow
+                offset: const Offset(0, 4), // changes position of shadow
               ),
         ],
       ),

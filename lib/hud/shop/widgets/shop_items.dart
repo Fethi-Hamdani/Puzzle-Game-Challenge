@@ -1,28 +1,93 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_game_challenge/hud/constants/colors.dart';
+import 'package:flutter_game_challenge/hud/player_info/player_info_cubit.dart';
+import 'package:flutter_game_challenge/hud/shop/models/diamond.dart';
+import 'package:flutter_game_challenge/hud/shop/models/shop_item.dart';
+import 'package:flutter_game_challenge/hud/widgets/card.dart';
 import 'package:flutter_game_challenge/hud/widgets/text.dart';
 
-import '../../constants/colors.dart';
+class LockedLayer extends StatelessWidget {
+  final ShopItem shopItem;
 
-class ShopItemContainer extends StatelessWidget {
-  final String title;
-
-  const ShopItemContainer({
+  const LockedLayer({
     super.key,
-    required this.title,
+    required this.shopItem,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(24),
-      color: Colors.lightBlue,
-      child: Center(
-        child: GameText(
-          text: title,
-          fontSize: 24,
-          borderColor: greenBorderColor,
+      alignment: Alignment.center,
+      color: Colors.black26,
+      child: GameText(
+        text: shopItem.priceEN.priceText,
+        fontSize: 24,
+        borderColor: greenBorderColor,
+      ),
+    );
+  }
+}
+
+class ShopItemContainer extends StatelessWidget {
+  final ShopItem shopItem;
+
+  const ShopItemContainer({
+    super.key,
+    required this.shopItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        BlocProvider.of<PlayerInfoCubit>(context).addDiamond(shopItem.quantity);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        width: double.maxFinite,
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: GameCard(
+                    gradientColors: yellowLinearGradient,
+                    borderColor: Colors.orange,
+                    child: Image.asset(shopItem.image),
+                  ),
+                ),
+              ],
+            ),
+
+            if (shopItem is Diamond)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: GameText(
+                    text: shopItem.quantity.toString(),
+                    fontSize: 24,
+                    borderColor: Colors.blueAccent,
+                  ),
+                ),
+              ),
+
+            if (shopItem is Diamond)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GameText(
+                    text: shopItem.priceEN.priceText,
+                    fontSize: 24,
+                    borderColor: yellowBorderColor,
+                  ),
+                ),
+              ),
+            // LockedLayer(shopItem: shopItem)
+          ],
         ),
       ),
     );
@@ -37,7 +102,7 @@ class ShopItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    // final screenWidth = MediaQuery.sizeOf(context).width;
     final screenHeight = MediaQuery.sizeOf(context).height;
     return PageStorage(
       bucket: PageStorageBucket(),
@@ -51,7 +116,7 @@ class ShopItems extends StatelessWidget {
         ),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) => ShopItemContainer(
-          title: items[itemIndex],
+          shopItem: items[itemIndex],
         ),
       ),
     );
