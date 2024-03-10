@@ -6,4 +6,5 @@ class GameControls {
   static bool debugMode = false;
   static BackgroundColor defaultBackgroundColor = BackgroundColor.green;
   static Fruits defaultFruit = Fruits.apple;
+  static int allowedLives = 3;
 }

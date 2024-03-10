@@ -5,10 +5,24 @@
 ☐ Scahe pobell with anti power up to resolve
 
 GamePlay improvements:
-    ☐ remove upper kill and replace with barrier
-    ☐ crash animation acceleration
-    ☐ respawn acceleration
-    ☐ add lives count (3 lives per stage)
-    ☐ on click fly up for a bit
+    ✔ remove upper kill and replace with barrier @done (2/28/2024, 6:36:02 PM)
+    ✔ crash animation acceleration @done (2/25/2024, 5:20:45 PM)
+    ✔ respawn acceleration @done (2/25/2024, 5:14:46 PM)
+    ✔ add lives count (3 lives per stage) @done (2/28/2024, 6:51:00 PM)
+    ✔ add auto respawn after 2 seconds @done (2/28/2024, 7:31:39 PM)
+    ✔ on click fly up for a bit @done (2/28/2024, 6:36:05 PM)
     ☐ add PowerUps collection (3 max)
-    ☐ add start/pause game functionalities
+    ✔ add start/pause game functionalities @done (2/25/2024, 4:27:00 PM)
+    ✔ shrink the plane hitbox to avoid a lot of collision with hazards @done (2/28/2024, 8:28:28 PM)
+    ☐ add dynamic distance between each obstacle
+    ✔ add different hit aimation when collapsing with different obstacles @done (3/1/2024, 12:15:18 PM)
+        ✔ add acid animation @done (3/1/2024, 12:15:07 PM)
+        ✔ add fire animation @done (3/1/2024, 12:15:13 PM)
+    ✔ add coins collection @done (3/3/2024, 6:01:40 PM)
+    ✔ shrinked the upper and lower bounds @done (3/3/2024, 6:01:39 PM)
+    ✔ enhance mounting speed @done (3/3/2024, 6:01:25 PM)
+    ✔ make the drop horizontal speed static @done (3/3/2024, 6:53:47 PM)
+    ✔ randomize space between obstacles @done (3/3/2024, 7:14:34 PM)
+    ☐ randomize drop spawn time
+    ☐ randomize drop spacing in large clouds
+    ☐ when could is purified it drops coins
