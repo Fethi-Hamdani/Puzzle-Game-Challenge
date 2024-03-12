@@ -31,8 +31,7 @@ bool getSoundLocalSettings() {
   return soundData ?? true;
 }
 
-class PlaneGame extends FlameGame
-    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
+class PlaneGame extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   bool tappedDown = false;
   bool incrementScore = true;
   //Score
@@ -63,12 +62,12 @@ class PlaneGame extends FlameGame
   bool isGamePlaying = false;
   bool isGameStarted = false;
   bool canFlyDown = true;
+  int lives = GameControls.allowedLives;
+  int coinsCollected = 0;
+
   //
   double get height => size.y;
   double get width => size.x;
-
-  int lives = GameControls.allowedLives;
-  int coinsCollected = 0;
 
   void addShield() {
     world.add(shield);
@@ -82,6 +81,16 @@ class PlaneGame extends FlameGame
   Color backgroundColor() {
     // TODO: implement backgroundColor
     return const Color(0xFF53B4DA);
+  }
+
+  void collectCoin(Coin coin) {
+    coinsCollected += coin.value;
+    score += coin.value;
+  }
+
+  void exitToMainScreen() {
+    overlays.removeAll(GameOverlay.values.map((e) => e.name).toList());
+    overlays.add(GameOverlay.mainMenu.name);
   }
 
   void initDimensions() {
@@ -113,18 +122,18 @@ class PlaneGame extends FlameGame
       respawn();
       return KeyEventResult.handled;
     }
-    if (button_Space) {
-      if (!isGamePlaying) return KeyEventResult.ignored;
-      if (plane.isOnShield) {
-        removeShield();
-        plane.isOnShield = false;
-      } else {
-        addShield();
-        plane.isOnShield = true;
-      }
+    // if (button_Space) {
+    //   if (!isGamePlaying) return KeyEventResult.ignored;
+    //   if (plane.isOnShield) {
+    //     removeShield();
+    //     plane.isOnShield = false;
+    //   } else {
+    //     addShield();
+    //     plane.isOnShield = true;
+    //   }
 
-      return KeyEventResult.handled;
-    }
+    //   return KeyEventResult.handled;
+    // }
     if (button_M) {
       if (overlays.isActive(GameOverlay.pause.name)) {
         resume();
@@ -134,35 +143,6 @@ class PlaneGame extends FlameGame
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
-  }
-
-  void start() {
-    isGamePlaying = true;
-    overlays.remove(GameOverlay.mainMenu.name);
-    resume(easyResume: false);
-    respawn(delay: false);
-    reset();
-  }
-
-  void stopGame() {
-    isGamePlaying = false;
-    background.parallax!.baseVelocity = Vector2(0, 0);
-  }
-
-  void pause() {
-    stopGame();
-    overlays.add(GameOverlay.pause.name);
-  }
-
-  Future<void> resume({bool easyResume = true}) async {
-    overlays.remove(GameOverlay.pause.name);
-    if (easyResume) {
-      await Future.delayed(const Duration(milliseconds: 500));
-    }
-    if (!isGameStarted) {
-      isGameStarted = true;
-    }
-    background.parallax!.baseVelocity = Vector2(20, 0);
   }
 
   @override
@@ -204,15 +184,15 @@ class PlaneGame extends FlameGame
   }
 
   @override
-  void onTapDown(TapDownEvent event) {
-    tappedDown = true;
-    super.onTapDown(event);
-  }
-
-  @override
   void onTapCancel(TapCancelEvent event) {
     tappedDown = false;
     super.onTapCancel(event);
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    tappedDown = true;
+    super.onTapDown(event);
   }
 
   @override
@@ -221,8 +201,70 @@ class PlaneGame extends FlameGame
     super.onTapUp(event);
   }
 
+  void pause() {
+    stopGame();
+    overlays.add(GameOverlay.pause.name);
+  }
+
+  void reduceLife() {
+    if (lives > 0) {
+      lives--;
+    }
+  }
+
   void removeShield() {
     shield.removeFromParent();
+  }
+
+  void reset() {
+    lives = GameControls.allowedLives;
+    score = 0;
+    coinsCollected = 0;
+  }
+
+  Future<void> respawn({bool delay = true}) async {
+    if (delay) await Future.delayed(const Duration(seconds: 2));
+    if (plane.isRemoved) {
+      plane = PaperPLane();
+      world.add(plane);
+    }
+  }
+
+  void restartGame() {
+    reset();
+    respawn(delay: false);
+    start();
+  }
+
+  Future<void> resume({bool easyResume = true}) async {
+    overlays.remove(GameOverlay.pause.name);
+    if (easyResume) {
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+    if (!isGameStarted) {
+      isGameStarted = true;
+    }
+    background.parallax!.baseVelocity = Vector2(20, 0);
+  }
+
+  void start() {
+    isGamePlaying = true;
+    overlays.remove(GameOverlay.mainMenu.name);
+    resume(easyResume: false);
+    respawn(delay: false);
+    reset();
+  }
+
+  void stopGame() {
+    isGamePlaying = false;
+    background.parallax!.baseVelocity = Vector2(0, 0);
+  }
+
+  void terminateGame() {
+    isGamePlaying = false;
+    Future.delayed(const Duration(seconds: 1), () {
+      overlays.add(GameOverlay.gameOver.name);
+    });
   }
 
   @override
@@ -246,49 +288,6 @@ class PlaneGame extends FlameGame
     livesText.text = 'Life: $lives';
     coinsText.text = 'Coins: $coinsCollected';
     super.update(dt);
-  }
-
-  void reduceLife() {
-    if (lives > 0) {
-      lives--;
-    }
-  }
-
-  void collectCoin(Coin coin) {
-    coinsCollected += coin.value;
-    score += coin.value;
-  }
-
-  void reset() {
-    lives = GameControls.allowedLives;
-    score = 0;
-    coinsCollected = 0;
-  }
-
-  void restartGame() {
-    reset();
-    respawn(delay: false);
-    start();
-  }
-
-  Future<void> respawn({bool delay = true}) async {
-    if (delay) await Future.delayed(const Duration(seconds: 2));
-    if (plane.isRemoved) {
-      plane = PaperPLane();
-      world.add(plane);
-    }
-  }
-
-  void terminateGame() {
-    isGamePlaying = false;
-    Future.delayed(const Duration(seconds: 1), () {
-      overlays.add(GameOverlay.gameOver.name);
-    });
-  }
-
-  void exitToMainScreen() {
-    overlays.removeAll(GameOverlay.values.map((e) => e.name).toList());
-    overlays.add(GameOverlay.mainMenu.name);
   }
 
   _initMusicSettings() {

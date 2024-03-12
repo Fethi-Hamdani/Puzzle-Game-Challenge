@@ -34,8 +34,8 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
         width: screenWidth / 2,
         height: screenHeight * 0.9,
         child: GameCard(
-            gradientColors: greenLinearGradient,
-            borderColor: greenBorderColor,
+            gradientColors: yellowLinearGradient,
+            borderColor: yellowBorderColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
               child: Column(
@@ -48,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
                   ),
                   //
                   GameButton(
-                    color: ButtonColor.green,
+                    color: ButtonColor.yellow,
                     onPressed: () => _soundButtonPressed(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -68,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
 
                   //
                   GameButton(
-                    color: ButtonColor.green,
+                    color: ButtonColor.yellow,
                     onPressed: () => _musicButtonPressed(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -87,7 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
                   ),
 
                   GameButton(
-                    color: ButtonColor.green,
+                    color: ButtonColor.yellow,
                     onPressed: () => _languageButtonPressed(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

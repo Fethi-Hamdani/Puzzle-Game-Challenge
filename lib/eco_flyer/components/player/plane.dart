@@ -3,18 +3,21 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_game_challenge/eco_flyer/components/consumbles/coin.dart';
+import 'package:flutter_game_challenge/main.dart';
 
+import '../../../hud/player_info/player_info_cubit.dart';
 import '../../core/constants.dart';
 import '../../plane_game.dart';
 
-const PLANE_CRASH_SPRITESHEET = "Plane/crash.png";
+const PLANE_ACID_SPRITESHEET = "Plane/acid_sprite.png";
 
+const PLANE_CRASH_SPRITESHEET = "Plane/crash.png";
+const PLANE_FIRE_SPRITESHEET = "Plane/fire_sprite.png";
 const PLANE_FLASH_SPRITESHEET = "Plane/plane_flash.png";
 const PLANE_SHIELD_SPRITESHEET = "Plane/plane_glow.png";
 const PLANE_SPRITESHEET = "Plane/Plane.png";
-const PLANE_ACID_SPRITESHEET = "Plane/acid_sprite.png";
-const PLANE_FIRE_SPRITESHEET = "Plane/fire_sprite.png";
 
 class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, CollisionCallbacks {
   static const double GRAVITY = 600.0;
@@ -29,8 +32,10 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
   //
   late double verticalSpeed;
 
+  late String currentSkin;
+
   // animations
-  late final SpriteAnimation _idleAnimation;
+  late SpriteAnimation _idleAnimation;
   late final SpriteAnimation _shieldAnimation;
   late final SpriteAnimation _crashAnimation;
   late final SpriteAnimation _flashAnimation;
@@ -65,6 +70,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
     super.onCollisionStart(intersectionPoints, other);
     if (other is Coin && !isCrashed) {
       other.consumed();
+      BlocProvider.of<PlayerInfoCubit>(gameRef.buildContext!).addGold(other.value);
       return;
     }
     if (!isOnShield && canBeKilled) {
@@ -105,6 +111,20 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
       if (!game.isGamePlaying) return;
       _fly(dt);
     }
+  }
+
+  updateSkin(String skin) async {
+    final spriteSheet = SpriteSheet(
+      image: await game.images.load(playerInfo.planeSkin),
+      srcSize: Vector2(1824, 912),
+    );
+
+    _idleAnimation = spriteSheet.createAnimation(
+      row: 0,
+      from: 0,
+      to: 1,
+      stepTime: 0.25,
+    );
   }
 
   Future<void> _crash(double dt) async {
@@ -219,7 +239,7 @@ class PaperPLane extends SpriteAnimationComponent with HasGameRef<PlaneGame>, Co
 
   Future<void> _loadAnimations() async {
     final spriteSheet = SpriteSheet(
-      image: await game.images.load(PLANE_SPRITESHEET),
+      image: await game.images.load(playerInfo.planeSkin),
       srcSize: Vector2(1824, 912),
     );
 

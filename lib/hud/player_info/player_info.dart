@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
-import 'package:flutter_game_challenge/hud/constants/button_colors.dart';
-import 'package:flutter_game_challenge/hud/constants/colors.dart';
 import 'package:flutter_game_challenge/hud/player_info/player_info_cubit.dart';
 import 'package:flutter_game_challenge/hud/player_info/player_info_model.dart';
 import 'package:flutter_game_challenge/hud/widgets/text.dart';
+
+import '../constants/colors.dart';
 
 class PlayerInfoScreen extends StatelessWidget {
   final PlaneGame game;
@@ -25,16 +25,16 @@ class PlayerInfoScreen extends StatelessWidget {
               children: [
                 GameText(
                   text: state.gold.toString(),
-                  borderColor: ButtonColor.yellow.borderColor,
+                  borderColor: greenBorderColor,
                   borderWidth: 2,
-                  textColor: redBorderColor,
+                  textColor: Colors.white,
                   fontSize: 24,
                 ),
                 GameText(
                   text: state.diamond.toString(),
-                  borderColor: ButtonColor.yellow.borderColor,
+                  borderColor: greenBorderColor,
                   borderWidth: 2,
-                  textColor: redBorderColor,
+                  textColor: Colors.white,
                   fontSize: 24,
                 ),
               ],

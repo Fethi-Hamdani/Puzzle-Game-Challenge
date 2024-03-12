@@ -8,6 +8,8 @@ import 'package:flutter_game_challenge/hud/player_info/player_info.dart';
 import 'package:flutter_game_challenge/hud/settings/settings_screen.dart';
 import 'package:flutter_game_challenge/hud/shop/shop_screen.dart';
 
+import 'dialog/dialog.dart';
+
 Map<String, Widget Function(BuildContext, PlaneGame)> gameHud = {
   GameOverlay.pause.name: (context, game) => PauseScreen(game: game),
   GameOverlay.mainMenu.name: (context, game) => MainScreen(game: game),
@@ -16,6 +18,7 @@ Map<String, Widget Function(BuildContext, PlaneGame)> gameHud = {
   GameOverlay.shop.name: (context, game) => ShopScreen(game: game),
   GameOverlay.fortuneWheel.name: (context, game) => FortuneWheelScreen(game: game),
   GameOverlay.gameOver.name: (context, game) => GameOverScreen(game: game),
+  GameOverlay.dialog.name: (context, game) => GameDialog(game: game),
 };
 
-enum GameOverlay { pause, mainMenu, settings, game, gameOver, fortuneWheel, shop, playerInfo }
+enum GameOverlay { pause, mainMenu, settings, game, gameOver, fortuneWheel, shop, playerInfo, dialog }

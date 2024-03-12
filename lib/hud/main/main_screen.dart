@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_game_challenge/eco_flyer/plane_game.dart';
 import 'package:flutter_game_challenge/hud/constants/button_colors.dart';
-import 'package:flutter_game_challenge/hud/constants/colors.dart';
 import 'package:flutter_game_challenge/hud/hud.dart';
 import 'package:flutter_game_challenge/hud/widgets/button.dart';
 import 'package:flutter_game_challenge/hud/widgets/icon.dart';
@@ -33,14 +32,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 text: "Eco Fly",
                 borderColor: ButtonColor.yellow.borderColor,
                 borderWidth: 2,
-                textColor: redBorderColor,
+                textColor: ButtonColor.yellow.borderColor,
                 fontSize: 60,
               ),
               const SizedBox(height: 20),
               FadeTransition(
                 opacity: _controller,
                 child: GameButton.text(
-                  color: ButtonColor.green,
+                  color: ButtonColor.yellow,
                   text: "PLAY",
                   fontSize: 30,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
@@ -57,7 +56,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       widget.game.overlays.remove(GameOverlay.mainMenu.name);
                       widget.game.overlays.add(GameOverlay.fortuneWheel.name);
                     },
-                    color: ButtonColor.green,
+                    color: ButtonColor.yellow,
                     child: const GameIcon(
                       icon: Icons.published_with_changes_outlined,
                       iconColor: Colors.redAccent,
@@ -69,7 +68,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       widget.game.overlays.remove(GameOverlay.mainMenu.name);
                       widget.game.overlays.add(GameOverlay.settings.name);
                     },
-                    color: ButtonColor.green,
+                    color: ButtonColor.yellow,
                     child: const GameIcon(
                       icon: Icons.settings,
                       iconColor: Colors.redAccent,
@@ -81,7 +80,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                       widget.game.overlays.remove(GameOverlay.mainMenu.name);
                       widget.game.overlays.add(GameOverlay.shop.name);
                     },
-                    color: ButtonColor.green,
+                    color: ButtonColor.yellow,
                     child: const GameIcon(
                       icon: Icons.shopping_cart,
                       iconColor: Colors.redAccent,
